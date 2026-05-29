@@ -24,9 +24,8 @@ Thumbs.db
 *.snk
 
 # ── portable app data (lives next to the published exe) ─────────
-# In dev this falls under bin/, but in case someone publishes to repo root
-# or copies the runtime exe out, exclude the runtime state explicitly.
-data/
+# Root-anchored — won't catch unrelated case-collisions like src/.../Backups/.
+/data/
 **/data/settings.json
 **/data/logs/
 **/data/cache/
@@ -35,7 +34,7 @@ data/
 **/data/exports/
 **/data/testing/
 **/data/profiles/
-backups/
+/backups/
 
 # ── local test fixtures (we don't ship the fake game tree) ──────
 testgame/
