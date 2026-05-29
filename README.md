@@ -1,14 +1,14 @@
 # CPMM2067
 
-A Cyberpunk 2077 mod manager — fast, portable, and built specifically around the CP2077 framework stack (REDmod, RED4ext, ArchiveXL, TweakXL, CET, Codeware/redscript, legacy `.archive`).
+A Cyberpunk 2077 mod manager —fast, portable, and built specifically around the CP2077 framework stack (REDmod, RED4ext, ArchiveXL, TweakXL, CET, Codeware/redscript, legacy `.archive`).
 
-Built ground-up from the lessons of [lepoco/cpmm](https://github.com/lepoco/cpmm) — a mod manager that shipped without REDmod or RED4ext support and stalled in 2022. CPMM2067 covers all seven CP2077 mod frameworks, ships a working NXM protocol handler, surfaces real conflict detection (not just filename overlap), and reads game logs to tell you whether your mods actually loaded.
+ CPMM2067 covers all seven CP2077 mod frameworks, ships a working NXM protocol handler, surfaces real conflict detection (not just filename overlap), and reads game logs to tell you whether your mods actually loaded.
 
 ---
 
 ## Quick start
 
-1. Download the latest **`CPMM2067-<version>-setup.exe`** from the [Releases page](https://github.com/NAKE-1/CPMM2067/releases), or grab the **`-portable.zip`** if you don't want an installer.
+1. Download the latest **`CPMM2067--setup.exe`** from the [Releases page](https://github.com/NAKE-1/CPMM2067/releases), or grab the **`-portable.zip`** if you don't want an installer.
 2. Run it. First launch auto-detects your Cyberpunk install (Steam/GOG/Epic) and registers the `nxm://` protocol so Nexus's "Mod Manager Download" buttons route into the app.
 3. (Optional) Paste your Nexus API key in **Settings → [ NEXUS MODS API KEY ]** if you want one-click NXM downloads.
 
@@ -144,8 +144,6 @@ Override with a one-line `datadir.cfg` next to the exe containing an alternative
 
 ## Credits / dependencies
 
-- **[refact0r/system24](https://github.com/refact0r/system24)** — theme inspiration (TUI Discord theme)
-- **[lepoco/cpmm](https://github.com/lepoco/cpmm)** — prior-art CP2077 mod manager (cautionary tale)
 - **[Deweh/CyberCAT-SimpleGUI](https://github.com/Deweh/CyberCAT-SimpleGUI)** — external save editor we launch
 - **[WopsS/RED4ext](https://github.com/WopsS/RED4ext)** — the framework loader we target
 - **[adamhathcock/SharpCompress](https://github.com/adamhathcock/SharpCompress)** — zip / 7z / rar reader
@@ -153,7 +151,6 @@ Override with a one-line `datadir.cfg` next to the exe containing an alternative
 - **[AvaloniaUI/Avalonia](https://github.com/AvaloniaUI/Avalonia)** — cross-platform XAML UI
 - **[CommunityToolkit.Mvvm](https://learn.microsoft.com/dotnet/communitytoolkit/mvvm/)** — MVVM source generators
 - **[serilog/serilog](https://github.com/serilog/serilog)** — structured logging
-- **[getsentry/sentry-dotnet](https://github.com/getsentry/sentry-dotnet)** — opt-in crash reporting
 
 ---
 
