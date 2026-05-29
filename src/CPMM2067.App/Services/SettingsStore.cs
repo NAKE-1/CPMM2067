@@ -15,7 +15,6 @@ public sealed record AppSettings
     public string? LastKnownGameVersion { get; init; }
     public string? NexusJwt { get; init; }
     public string? PreferredBrowserExe { get; init; }
-    public string? SaveEditorExe { get; init; }
 }
 
 public static class SettingsStore

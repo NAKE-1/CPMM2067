@@ -45,7 +45,6 @@ public partial class MainWindowViewModel : ViewModelBase
             new NavItem("Conflicts", new RelayCommand(() => Navigate<ConflictsViewModel>())),
             new NavItem("Load report", new RelayCommand(() => Navigate<LoadReportViewModel>())),
             new NavItem("Saves", new RelayCommand(() => Navigate<SavesViewModel>())),
-            new NavItem("Save editor", new RelayCommand(() => Navigate<SaveEditorViewModel>())),
             new NavItem("Logs", new RelayCommand(() => Navigate<LogsViewModel>())),
             new NavItem("Settings", new RelayCommand(() => Navigate<SettingsViewModel>())),
             new NavItem("About", new RelayCommand(() => Navigate<AboutViewModel>())),

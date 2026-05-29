@@ -78,7 +78,6 @@ public static class AppHost
         sc.AddTransient<LoadOrderViewModel>();
         sc.AddTransient<SettingsViewModel>();
         sc.AddTransient<LogsViewModel>();
-        sc.AddTransient<SaveEditorViewModel>();
         sc.AddTransient<AboutViewModel>();
         sc.AddTransient<SavesViewModel>();
         sc.AddTransient<ConflictsViewModel>();

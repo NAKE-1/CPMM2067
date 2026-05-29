@@ -69,10 +69,6 @@
                                             Command="{Binding InspectCommand}"
                                             ToolTip.Tip="Scan the save for mod fingerprints"
                                             FontSize="11" Padding="6,4"/>
-                                    <Button Content="[ EDIT ]"
-                                            Command="{Binding EditInCyberCatCommand}"
-                                            ToolTip.Tip="Open this save in CyberCAT-SimpleGUI (configure path in Save editor sidebar)"
-                                            FontSize="11" Padding="6,4"/>
                                     <Button Classes="Accent" Content="[ BACKUP ]"
                                             Command="{Binding BackupCommand}"
                                             FontSize="11" Padding="8,4"/>

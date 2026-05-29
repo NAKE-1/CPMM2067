@@ -59,7 +59,7 @@
  ▄▖▄▖▖ ▖▖ ▖   ▄▖▄▖▄▖▄▖
  ▌ ▙▌▛▖▞▌▛▖▞▌▄▖▌▌▙▌▙▌▌▌
  ▙▖▌ ▌▝ ▌▌▝ ▌  ▙▌▙▌▙▌▛▘
-                  v0.1</TextBlock>
+                  v0.2</TextBlock>
                 </StackPanel>
 
                 <TextBlock DockPanel.Dock="Top" Classes="PanelLabel" Margin="20,8,0,4" Text="// NAVIGATION"/>

@@ -231,20 +231,6 @@ public sealed partial class SaveRow : ObservableObject
     [RelayCommand] private async Task DuplicateAsync() => await _parent.DuplicateAsync(this);
 
     [RelayCommand]
-    private void EditInCyberCat()
-    {
-        if (CPMM2067.App.Services.SaveEditorLauncher.TryLaunch(Path, out var err))
-        {
-            // success — leave Status alone, child window handles UX
-        }
-        else
-        {
-            // surface to the parent VM's Status field
-            _parent.GetType().GetProperty("Status")?.SetValue(_parent, err);
-        }
-    }
-
-    [RelayCommand]
     private async Task InspectAsync()
     {
         SaveScanResult result;

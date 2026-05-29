@@ -27,8 +27,7 @@ For a developer-mode launch: clone this repo, run **`launch.bat`** — it auto-i
 | **Load order** | Per-framework load-order UI. REDmod tab has drag-via-arrow reorder writing to `mods.json`. |
 | **Conflicts** | Two scanners: filename collisions across installed mods (from journal) + semantic conflicts (TweakXL key collisions, redscript hook collisions on `@addMethod`/`@replaceMethod`/`@wrapMethod`). |
 | **Load report** | Parses CET / RED4ext / redscript / REDmod load logs and cross-references with the disk scan. Green = on disk and confirmed loaded; yellow = present but never loaded; red = stale log reference. |
-| **Saves** | Browse CP2077 saves with thumbnail + last-played. Per-row backup (to `<exe>\backups\saves\<timestamp>\`), inspect (heuristic mod-fingerprint), rename, duplicate, delete (with backup-first option), and `[ EDIT ]` (launches CyberCAT-SimpleGUI). |
-| **Save editor** | External integration: launches [CyberCAT-SimpleGUI](https://www.nexusmods.com/cyberpunk2077/mods/718) pointed at a save's `sav.dat`. Auto-detects common install paths. |
+| **Saves** | Browse CP2077 saves with thumbnail + last-played. Per-row backup (to `<exe>\backups\saves\<timestamp>\`), inspect (heuristic mod-fingerprint), rename, duplicate, and delete (with backup-first option). |
 | **Logs** | App live log + game log viewer (red4ext, r6, CET, redmod). [ CREATE DIAGNOSTIC BUNDLE ] zips logs + install manifest + game version for bug reports. |
 | **Settings** | Nexus API key + JWT, NXM protocol handler register/unregister, preferred browser (bypass Edge), Nexus API usage tracker (daily + hourly remaining), testing mode (dry-run installs), telemetry opt-in. |
 | **About** | Version, build date, data dir, manual update check via Velopack, full feature checklist, credits. |
@@ -144,7 +143,6 @@ Override with a one-line `datadir.cfg` next to the exe containing an alternative
 
 ## Credits / dependencies
 
-- **[Deweh/CyberCAT-SimpleGUI](https://github.com/Deweh/CyberCAT-SimpleGUI)** — external save editor we launch
 - **[WopsS/RED4ext](https://github.com/WopsS/RED4ext)** — the framework loader we target
 - **[adamhathcock/SharpCompress](https://github.com/adamhathcock/SharpCompress)** — zip / 7z / rar reader
 - **[velopack/velopack](https://github.com/velopack/velopack)** — auto-update plumbing
@@ -158,7 +156,6 @@ Override with a one-line `datadir.cfg` next to the exe containing an alternative
 
 PRs welcome once the repo flips public. Things on the queue:
 
-- Native CR2W save parser (CyberCAT vendored or rewritten)
 - Drag-drop into Collections page
 - Code-signing through SignPath Foundation
 - Linux port (Avalonia ready; the hard part is Proton compat-data layout for game detection)

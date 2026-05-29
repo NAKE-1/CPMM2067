@@ -52,7 +52,6 @@
 [*] Diagnostic bundle export
 [*] Confirmation dialog for install / revert / close-while-busy
 [*] Portable: all state in &lt;exe dir&gt;\data\ unless overridden
-[ ] Save editor (planned v1.4 via CyberCAT)
 [ ] Nexus Collections (planned v1.5)
 [ ] Drag-drop install (Avalonia 12 API revisit)
 [ ] FOMOD installer wizard
@@ -66,8 +65,6 @@
                 <TextBlock Classes="PanelLabel" Text="[ CREDITS / DEPENDENCIES ]"/>
                 <TextBlock Classes="Mono" Foreground="{DynamicResource Text3Brush}" xml:space="preserve">refact0r/system24    theme inspiration (TUI Discord theme)
 lepoco/cpmm          prior-art CP2077 mod manager (cautionary tale)
-PixelRick/Cyberpunk… save editor approach (deferred)
-Deweh/CyberCAT-SimpleGUI  save format library (planned v1.4)
 WopsS/RED4ext        native plugin loader (target framework)
 adamhathcock/SharpCompress  zip/7z/rar reader
 velopack/velopack    auto-update plumbing
