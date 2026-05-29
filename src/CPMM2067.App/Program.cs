@@ -1,8 +1,8 @@
 ﻿using Avalonia;
 using CPMM2067.App.Services;
-using CPMM2067.Update;
 using System;
 using System.IO;
+using Velopack;
 
 namespace CPMM2067.App;
 
@@ -13,7 +13,10 @@ sealed class Program
     [STAThread]
     public static void Main(string[] args)
     {
-        UpdaterService.EarlyInit(args);
+        // Velopack's installer-detection MUST be the first line in Main() and
+        // must be visible inside this assembly (the verifier scans the entry exe's IL).
+        // Don't hoist this into another project — Velopack pack will fatal-error otherwise.
+        VelopackApp.Build().Run();
 
         string? nxm = null;
         for (var i = 0; i < args.Length; i++)
