@@ -1,6 +1,7 @@
 using System;
 using System.Diagnostics;
 using System.IO;
+using System.Linq;
 
 namespace CPMM2067.App.Services;
 
@@ -60,6 +61,15 @@ public static class SaveEditorLauncher
 
     public static string? AutoDetect()
     {
+        // First: our own install location from CyberCatInstaller
+        var installRoot = CyberCatInstaller.InstallRoot;
+        if (Directory.Exists(installRoot))
+        {
+            var ours = Directory.EnumerateFiles(installRoot, "CP2077SaveEditor.exe", SearchOption.AllDirectories)
+                .FirstOrDefault();
+            if (ours != null) return ours;
+        }
+        // Then: common install paths the user might have hand-placed
         foreach (var raw in s_candidatePaths)
         {
             var p = Environment.ExpandEnvironmentVariables(raw);

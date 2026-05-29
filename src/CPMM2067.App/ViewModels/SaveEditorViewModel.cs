@@ -65,7 +65,33 @@ public partial class SaveEditorViewModel : ViewModelBase
     }
 
     [RelayCommand]
-    private void Download()
+    private async Task DownloadAsync()
+    {
+        Status = "Starting CyberCAT-SimpleGUI download…";
+        try
+        {
+            var result = await CyberCatInstaller.DownloadAndInstallAsync(
+                progress: msg => Avalonia.Threading.Dispatcher.UIThread.Post(() => Status = msg));
+            if (result.Ok && !string.IsNullOrEmpty(result.ExePath))
+            {
+                SaveEditorExe = result.ExePath;
+                Status = result.Message;
+            }
+            else
+            {
+                Status = "Auto-download failed: " + result.Message +
+                         "  —  Opening the Nexus page as fallback.";
+                BrowserLauncher.OpenUrl(SaveEditorLauncher.DefaultNexusUrl);
+            }
+        }
+        catch (Exception ex)
+        {
+            Status = "Auto-download error: " + ex.Message;
+        }
+    }
+
+    [RelayCommand]
+    private void OpenNexusPage()
         => BrowserLauncher.OpenUrl(SaveEditorLauncher.DefaultNexusUrl);
 
     [RelayCommand]
