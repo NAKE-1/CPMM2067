@@ -12,7 +12,7 @@ namespace CPMM2067.App.ViewModels;
 public partial class MainWindowViewModel : ViewModelBase
 {
     [ObservableProperty] private ViewModelBase _current;
-    [ObservableProperty] private string _statusBar = "CPMM2067 v0.2 :: cyberpunk 2077 mod manager";
+    [ObservableProperty] private string _statusBar = "CPMM2067 v0.3 :: cyberpunk 2077 mod manager";
     [ObservableProperty] private string _gameStatusLabel = "[ GAME: NOT RUNNING ]";
     [ObservableProperty] private string _gameStatusDetail = "not running";
 
