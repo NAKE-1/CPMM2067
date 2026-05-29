@@ -6,7 +6,7 @@
     <ApplicationManifest>app.manifest</ApplicationManifest>
     <AvaloniaUseCompiledBindingsByDefault>true</AvaloniaUseCompiledBindingsByDefault>
     <AssemblyName>CPMM2067.App</AssemblyName>
-    <Version Condition="'$(Version)' == ''">0.2.0</Version>
+    <Version Condition="'$(Version)' == ''">0.3.0</Version>
     <Authors>CPMM2067 Project</Authors>
     <Product>CPMM2067</Product>
     <Description>Cyberpunk 2077 mod manager (CPMM2067)</Description>
