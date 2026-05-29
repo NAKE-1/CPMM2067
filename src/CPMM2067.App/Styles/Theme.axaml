@@ -1,0 +1,68 @@
+<ResourceDictionary xmlns="https://github.com/avaloniaui"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+
+    <!-- system24 palette (port of refact0r/system24, OKLCH approximated to sRGB) -->
+
+    <!-- Backgrounds: monochrome dark -->
+    <Color x:Key="Bg1Color">#4A4A4A</Color>
+    <Color x:Key="Bg2Color">#404040</Color>
+    <Color x:Key="Bg3Color">#353535</Color>
+    <Color x:Key="Bg4Color">#2A2A2A</Color>
+
+    <SolidColorBrush x:Key="Bg1Brush" Color="{StaticResource Bg1Color}"/>
+    <SolidColorBrush x:Key="Bg2Brush" Color="{StaticResource Bg2Color}"/>
+    <SolidColorBrush x:Key="Bg3Brush" Color="{StaticResource Bg3Color}"/>
+    <SolidColorBrush x:Key="Bg4Brush" Color="{StaticResource Bg4Color}"/>
+
+    <SolidColorBrush x:Key="HoverBrush" Color="#1AFFFFFF"/>
+    <SolidColorBrush x:Key="ActiveBrush" Color="#33FFFFFF"/>
+    <SolidColorBrush x:Key="Active2Brush" Color="#4DFFFFFF"/>
+
+    <!-- Text: grayscale -->
+    <Color x:Key="Text1Color">#F0F0F0</Color>
+    <Color x:Key="Text2Color">#D0D0D0</Color>
+    <Color x:Key="Text3Color">#B3B3B3</Color>
+    <Color x:Key="Text4Color">#8A8A8A</Color>
+    <Color x:Key="Text5Color">#5E5E5E</Color>
+
+    <SolidColorBrush x:Key="Text1Brush" Color="{StaticResource Text1Color}"/>
+    <SolidColorBrush x:Key="Text2Brush" Color="{StaticResource Text2Color}"/>
+    <SolidColorBrush x:Key="Text3Brush" Color="{StaticResource Text3Color}"/>
+    <SolidColorBrush x:Key="Text4Brush" Color="{StaticResource Text4Color}"/>
+    <SolidColorBrush x:Key="Text5Brush" Color="{StaticResource Text5Color}"/>
+
+    <!-- Accent: purple -->
+    <Color x:Key="Accent1Color">#B8A4D9</Color>
+    <Color x:Key="Accent2Color">#A78BD6</Color>
+    <Color x:Key="Accent3Color">#9476C8</Color>
+    <Color x:Key="Accent4Color">#7E60B5</Color>
+    <Color x:Key="Accent5Color">#6B4FA0</Color>
+
+    <SolidColorBrush x:Key="Accent1Brush" Color="{StaticResource Accent1Color}"/>
+    <SolidColorBrush x:Key="Accent2Brush" Color="{StaticResource Accent2Color}"/>
+    <SolidColorBrush x:Key="Accent3Brush" Color="{StaticResource Accent3Color}"/>
+    <SolidColorBrush x:Key="Accent4Brush" Color="{StaticResource Accent4Color}"/>
+    <SolidColorBrush x:Key="Accent5Brush" Color="{StaticResource Accent5Color}"/>
+
+    <!-- Status -->
+    <SolidColorBrush x:Key="OnlineBrush" Color="#7FC7A8"/>
+    <SolidColorBrush x:Key="DndBrush" Color="#E0918D"/>
+    <SolidColorBrush x:Key="IdleBrush" Color="#D4B46A"/>
+
+    <!-- Borders -->
+    <SolidColorBrush x:Key="BorderLightBrush" Color="#1AFFFFFF"/>
+    <SolidColorBrush x:Key="BorderBrush" Color="#33FFFFFF"/>
+    <SolidColorBrush x:Key="BorderHoverBrush" Color="{StaticResource Accent2Color}"/>
+    <SolidColorBrush x:Key="ButtonBorderBrush" Color="#1AFFFFFF"/>
+
+    <!-- Typography -->
+    <FontFamily x:Key="MonoFont">DM Mono, Cascadia Mono, Cascadia Code, Consolas, Menlo, Courier New, monospace</FontFamily>
+    <x:Double x:Key="FontWeightLight">300</x:Double>
+
+    <!-- Sizing -->
+    <Thickness x:Key="PanelBorderThickness">2</Thickness>
+    <Thickness x:Key="PanelPadding">14</Thickness>
+    <Thickness x:Key="PanelMargin">6</Thickness>
+    <CornerRadius x:Key="PanelCornerRadius">0</CornerRadius>
+
+</ResourceDictionary>

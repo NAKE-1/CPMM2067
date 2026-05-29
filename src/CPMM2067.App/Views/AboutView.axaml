@@ -1,0 +1,93 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:vm="using:CPMM2067.App.ViewModels"
+             x:Class="CPMM2067.App.Views.AboutView"
+             x:DataType="vm:AboutViewModel">
+    <ScrollViewer HorizontalScrollBarVisibility="Disabled" VerticalScrollBarVisibility="Auto">
+    <StackPanel Spacing="14" Margin="0,0,0,40">
+        <TextBlock Classes="PanelLabel" Text="// ABOUT"/>
+        <TextBlock Classes="Heading" Text="cpmm2067"/>
+
+        <Border Classes="Panel">
+            <StackPanel Spacing="10">
+                <TextBlock Classes="PanelLabel" Text="[ VERSION ]"/>
+                <Grid ColumnDefinitions="140,*" RowDefinitions="Auto,Auto,Auto,Auto">
+                    <TextBlock Grid.Row="0" Grid.Column="0" Classes="Sub" Text="version"/>
+                    <TextBlock Grid.Row="0" Grid.Column="1" Text="{Binding Version}" Foreground="{DynamicResource Text1Brush}"/>
+                    <TextBlock Grid.Row="1" Grid.Column="0" Classes="Sub" Text="built"/>
+                    <TextBlock Grid.Row="1" Grid.Column="1" Text="{Binding BuildDate}" Foreground="{DynamicResource Text1Brush}"/>
+                    <TextBlock Grid.Row="2" Grid.Column="0" Classes="Sub" Text="data dir"/>
+                    <TextBlock Grid.Row="2" Grid.Column="1" Text="{Binding DataDir}" Foreground="{DynamicResource Text1Brush}" TextWrapping="Wrap"/>
+                    <TextBlock Grid.Row="3" Grid.Column="0" Classes="Sub" Text="repo"/>
+                    <TextBlock Grid.Row="3" Grid.Column="1" Text="{Binding ProjectUrl}" Foreground="{DynamicResource Accent1Brush}"/>
+                </Grid>
+                <StackPanel Orientation="Horizontal" Spacing="10">
+                    <Button Classes="Accent" Content="[ CHECK FOR UPDATE ]" Command="{Binding CheckForUpdateCommand}"/>
+                    <Button Content="[ open repo ]" Command="{Binding OpenProjectUrlCommand}"/>
+                    <Button Content="[ open data dir ]" Command="{Binding OpenDataDirCommand}"/>
+                    <TextBlock Classes="Mono" VerticalAlignment="Center"
+                               Foreground="{DynamicResource Accent1Brush}"
+                               Text="{Binding UpdateStatus}"/>
+                </StackPanel>
+            </StackPanel>
+        </Border>
+
+        <Border Classes="Panel">
+            <StackPanel Spacing="6">
+                <TextBlock Classes="PanelLabel" Text="[ FEATURES ]"/>
+                <TextBlock Classes="Mono" Foreground="{DynamicResource Text3Brush}" xml:space="preserve">[*] Auto-detect CP2077 (Steam / GOG / Epic / manual)
+[*] Manual path persisted across launches
+[*] REDmod handler (install / uninstall / mods.json / deploy)
+[*] RED4ext handler (red4ext\, bin\x64\, r6\ payloads)
+[*] Legacy .archive handler (incl. ArchiveXL .xl)
+[*] Drop-in mod scanner across 7 frameworks
+[*] .zip / .7z / .rar extraction (SharpCompress)
+[*] Install journal with revert per entry
+[*] Active transfers panel + queue tray (speed + ETA + progress bar)
+[*] NXM:// protocol — auto-registered at launch
+[*] Single-instance gate (named pipe), no duplicate windows
+[*] Testing mode (dry-run, extracts to data\testing\)
+[*] Bottom-bar game process monitor
+[*] Game log viewer (red4ext, r6, CET, redmod)
+[*] Diagnostic bundle export
+[*] Confirmation dialog for install / revert / close-while-busy
+[*] Portable: all state in &lt;exe dir&gt;\data\ unless overridden
+[ ] Save editor (planned v1.4 via CyberCAT)
+[ ] Nexus Collections (planned v1.5)
+[ ] Drag-drop install (Avalonia 12 API revisit)
+[ ] FOMOD installer wizard
+[ ] TweakXL / CET / Codeware handlers
+[ ] Conflict scanner</TextBlock>
+            </StackPanel>
+        </Border>
+
+        <Border Classes="Panel">
+            <StackPanel Spacing="6">
+                <TextBlock Classes="PanelLabel" Text="[ CREDITS / DEPENDENCIES ]"/>
+                <TextBlock Classes="Mono" Foreground="{DynamicResource Text3Brush}" xml:space="preserve">refact0r/system24    theme inspiration (TUI Discord theme)
+lepoco/cpmm          prior-art CP2077 mod manager (cautionary tale)
+PixelRick/Cyberpunk… save editor approach (deferred)
+Deweh/CyberCAT-SimpleGUI  save format library (planned v1.4)
+WopsS/RED4ext        native plugin loader (target framework)
+adamhathcock/SharpCompress  zip/7z/rar reader
+velopack/velopack    auto-update plumbing
+AvaloniaUI/Avalonia  cross-platform XAML UI
+CommunityToolkit.Mvvm MVVM source generators
+serilog/serilog      structured logging
+getsentry/sentry-dotnet  opt-in crash reporting</TextBlock>
+            </StackPanel>
+        </Border>
+
+        <Border Classes="Panel">
+            <StackPanel Spacing="6">
+                <TextBlock Classes="PanelLabel" Text="[ ROADMAP / UPDATER ]"/>
+                <TextBlock Classes="Sub" TextWrapping="Wrap">
+                    The [ CHECK FOR UPDATE ] button uses Velopack against the GitHub Releases feed
+                    at the project repo. Once the repo flips public and a release is tagged, the app
+                    will be able to pull and apply updates in-place. Until then this is a no-op.
+                </TextBlock>
+            </StackPanel>
+        </Border>
+    </StackPanel>
+    </ScrollViewer>
+</UserControl>

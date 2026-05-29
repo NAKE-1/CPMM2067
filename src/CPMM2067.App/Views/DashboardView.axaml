@@ -1,0 +1,67 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:vm="using:CPMM2067.App.ViewModels"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             mc:Ignorable="d"
+             x:Class="CPMM2067.App.Views.DashboardView"
+             x:DataType="vm:DashboardViewModel">
+    <StackPanel Spacing="14">
+        <TextBlock Classes="PanelLabel" Text="// DASHBOARD"/>
+        <TextBlock Classes="Heading" Text="cyberpunk 2077"/>
+
+        <Border Classes="Panel">
+            <StackPanel Spacing="10">
+                <TextBlock Classes="PanelLabel" Text="[ GAME STATUS ]"/>
+                <TextBlock Text="{Binding GameStatus}" FontSize="14" Foreground="{DynamicResource Text2Brush}"
+                           TextWrapping="Wrap"/>
+
+                <Grid ColumnDefinitions="160,*" RowDefinitions="Auto,Auto,Auto,Auto" Margin="0,8,0,0"
+                      IsVisible="{Binding GameDetected}">
+                    <TextBlock Grid.Row="0" Grid.Column="0" Classes="Sub" Text="storefront"/>
+                    <TextBlock Grid.Row="0" Grid.Column="1" Text="{Binding GameStorefront}" Foreground="{DynamicResource Text1Brush}"/>
+                    <TextBlock Grid.Row="1" Grid.Column="0" Classes="Sub" Text="version"/>
+                    <TextBlock Grid.Row="1" Grid.Column="1" Text="{Binding GameVersion}" Foreground="{DynamicResource Text1Brush}"/>
+                    <TextBlock Grid.Row="2" Grid.Column="0" Classes="Sub" Text="install dir"/>
+                    <TextBlock Grid.Row="2" Grid.Column="1" Text="{Binding GameInstallDir}" Foreground="{DynamicResource Text1Brush}" TextWrapping="Wrap"/>
+                    <TextBlock Grid.Row="3" Grid.Column="0" Classes="Sub" Text="redmod dlc"/>
+                    <TextBlock Grid.Row="3" Grid.Column="1" Text="{Binding RedModInstalled}" Foreground="{DynamicResource Text1Brush}"/>
+                </Grid>
+            </StackPanel>
+        </Border>
+
+        <StackPanel Orientation="Horizontal" Spacing="10">
+            <Button Content="[ re-detect ]" Command="{Binding DetectCommand}"/>
+            <Button Content="[ pick folder… ]" Command="{Binding PickFolderCommand}"
+                    ToolTip.Tip="Manually point at a CP2077 install or a TEST folder"/>
+            <Button Classes="Accent" Content="[ DEPLOY + PLAY ]"
+                    Command="{Binding PlayCommand}"
+                    IsEnabled="{Binding GameDetected}"/>
+            <Button Content="[ open appdata ]" Command="{Binding OpenAppDataCommand}"/>
+            <Button Content="[ BACKUP SAVE ]" Command="{Binding GoToSavesCommand}"
+                    ToolTip.Tip="Browse CP2077 saves and back one up to the local backups dir"/>
+        </StackPanel>
+
+        <Border Classes="Panel" Margin="0,8,0,0">
+            <StackPanel Spacing="6">
+                <TextBlock Classes="PanelLabel" Text="[ FRAMEWORK SUPPORT MATRIX ]"/>
+                <TextBlock Classes="Mono" Foreground="{DynamicResource Text3Brush}" xml:space="preserve">[*] REDmod              v1.0
+[ ] Legacy .archive     v1.1
+[ ] RED4ext             v1.1
+[ ] ArchiveXL           v1.1
+[ ] TweakXL             v1.2
+[ ] CET                 v1.2
+[ ] Codeware/redscript  v1.3
+[ ] Save editor         v1.4</TextBlock>
+            </StackPanel>
+        </Border>
+
+        <Border Classes="Panel">
+            <StackPanel Spacing="6">
+                <TextBlock Classes="PanelLabel" Text="[ TIP ]"/>
+                <TextBlock Classes="Sub" TextWrapping="Wrap"
+                           Text="For development testing, use [ pick folder… ] to point CPMM2067 at the testgame/ directory in the repo root — it has a fake REDmod ready to scan."/>
+            </StackPanel>
+        </Border>
+    </StackPanel>
+</UserControl>

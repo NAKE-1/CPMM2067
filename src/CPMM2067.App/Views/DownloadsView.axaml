@@ -1,0 +1,158 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:vm="using:CPMM2067.App.ViewModels"
+             xmlns:fx="using:CPMM2067.Frameworks"
+             x:Class="CPMM2067.App.Views.DownloadsView"
+             x:DataType="vm:DownloadsViewModel">
+    <StackPanel Spacing="12">
+        <TextBlock Classes="PanelLabel" Text="// DOWNLOADS"/>
+        <TextBlock Classes="Heading" Text="install journal"/>
+
+        <StackPanel Orientation="Horizontal" Spacing="10">
+            <Button Content="[ refresh ]" Command="{Binding RefreshCommand}"/>
+            <Button Classes="Accent" Content="[ INSTALL ALL DOWNLOADED ]"
+                    Command="{Binding InstallAllDownloadedCommand}"/>
+            <Button Content="[ open journal folder ]" Command="{Binding OpenJournalFolderCommand}"/>
+            <TextBlock Classes="Mono" VerticalAlignment="Center"
+                       Text="{Binding Status}"
+                       Foreground="{DynamicResource Accent1Brush}"/>
+        </StackPanel>
+
+        <!-- ACTIVE TRANSFERS -->
+        <Border Classes="Panel" BorderBrush="{DynamicResource Accent3Brush}">
+            <StackPanel Spacing="8">
+                <TextBlock Classes="PanelLabel" Text="[ ACTIVE TRANSFERS ]"/>
+                <TextBlock Classes="Sub"
+                           Text="In-flight downloads and installs. Closing the app while items are here will prompt to keep them running."
+                           TextWrapping="Wrap"/>
+
+                <ItemsControl ItemsSource="{Binding ActiveJobs}">
+                    <ItemsControl.ItemTemplate>
+                        <DataTemplate x:DataType="fx:InstallJob">
+                            <Border Background="{DynamicResource Bg3Brush}"
+                                    BorderBrush="{DynamicResource BorderBrush}"
+                                    BorderThickness="2"
+                                    Padding="10,8" Margin="0,4">
+                                <Grid RowDefinitions="Auto,Auto,Auto" ColumnDefinitions="*,Auto,Auto">
+                                    <TextBlock Grid.Row="0" Grid.Column="0"
+                                               Text="{Binding Name}"
+                                               Foreground="{DynamicResource Text2Brush}"
+                                               TextTrimming="CharacterEllipsis"/>
+                                    <TextBlock Grid.Row="0" Grid.Column="1"
+                                               Text="{Binding Status}"
+                                               Classes="Mono"
+                                               Foreground="{DynamicResource Accent1Brush}"
+                                               Margin="10,0"/>
+                                    <Button Grid.Row="0" Grid.Column="2"
+                                            Content="[ CANCEL ]"
+                                            Command="{Binding $parent[ItemsControl].((vm:DownloadsViewModel)DataContext).CancelJobCommand}"
+                                            CommandParameter="{Binding}"
+                                            Foreground="{DynamicResource DndBrush}"
+                                            FontSize="11" Padding="8,2"
+                                            IsVisible="{Binding CanCancel}"/>
+                                    <ProgressBar Grid.Row="1" Grid.ColumnSpan="3"
+                                                 Height="6" Margin="0,6"
+                                                 Minimum="0" Maximum="100"
+                                                 Value="{Binding ProgressPercent}"
+                                                 IsIndeterminate="{Binding BarShouldAnimate}"
+                                                 Classes.cancelled="{Binding IsCancelled}"
+                                                 Classes.failed="{Binding IsFailed}"
+                                                 Foreground="{DynamicResource Accent2Brush}"
+                                                 Background="{DynamicResource Bg2Brush}"/>
+                                    <TextBlock Grid.Row="2" Grid.ColumnSpan="3"
+                                               Text="{Binding StatusText}"
+                                               Classes="Mono" FontSize="11"
+                                               Foreground="{DynamicResource Text4Brush}"
+                                               TextTrimming="CharacterEllipsis"/>
+                                </Grid>
+                            </Border>
+                        </DataTemplate>
+                    </ItemsControl.ItemTemplate>
+                </ItemsControl>
+
+                <TextBlock Classes="Muted" FontSize="11"
+                           Text="(no active transfers)"
+                           IsVisible="{Binding ActiveJobs.Count, Converter={x:Static ObjectConverters.Equal}, ConverterParameter=0}"/>
+            </StackPanel>
+        </Border>
+
+        <!-- HISTORY -->
+        <Border Classes="Panel">
+            <StackPanel Spacing="10">
+                <TextBlock Classes="PanelLabel" Text="[ INSTALL HISTORY ]"/>
+                <TextBlock Classes="Sub"
+                           Text="Every download and install op is recorded with its file list so it can be reverted later. Downloaded zips live in &lt;app dir&gt;\data\cache\archives\."
+                           TextWrapping="Wrap"/>
+
+                <Grid ColumnDefinitions="140,*,80,100,60,160,300" Margin="0,4,0,4">
+                    <TextBlock Grid.Column="0" Classes="PanelLabel" Text="WHEN"/>
+                    <TextBlock Grid.Column="1" Classes="PanelLabel" Text="NAME"/>
+                    <TextBlock Grid.Column="2" Classes="PanelLabel" Text="VERSION"/>
+                    <TextBlock Grid.Column="3" Classes="PanelLabel" Text="FRAMEWORK"/>
+                    <TextBlock Grid.Column="4" Classes="PanelLabel" Text="FILES"/>
+                    <TextBlock Grid.Column="5" Classes="PanelLabel" Text="DEPS"/>
+                    <TextBlock Grid.Column="6" Classes="PanelLabel" Text="STATUS / ACTIONS"
+                               HorizontalAlignment="Right"/>
+                </Grid>
+
+                <ListBox ItemsSource="{Binding Entries}" Height="380">
+                    <ListBox.ItemTemplate>
+                        <DataTemplate x:DataType="vm:JournalRow">
+                            <Grid ColumnDefinitions="140,*,80,100,60,160,300">
+                                <TextBlock Grid.Column="0" Text="{Binding At}" Classes="Mono"
+                                           Foreground="{DynamicResource Text5Brush}"
+                                           VerticalAlignment="Center"/>
+                                <TextBlock Grid.Column="1" Text="{Binding Name}"
+                                           Foreground="{DynamicResource Text2Brush}"
+                                           TextTrimming="CharacterEllipsis"
+                                           VerticalAlignment="Center"/>
+                                <TextBlock Grid.Column="2" Text="{Binding Version}" Classes="Mono"
+                                           VerticalAlignment="Center"/>
+                                <TextBlock Grid.Column="3" Text="{Binding Framework}" Classes="Mono"
+                                           Foreground="{DynamicResource Accent1Brush}"
+                                           VerticalAlignment="Center"/>
+                                <TextBlock Grid.Column="4" Text="{Binding FileCount}" Classes="Mono"
+                                           VerticalAlignment="Center"/>
+                                <TextBlock Grid.Column="5" Text="{Binding Dependencies}" Classes="Mono"
+                                           Foreground="{DynamicResource Text5Brush}"
+                                           TextTrimming="CharacterEllipsis"
+                                           VerticalAlignment="Center"/>
+                                <StackPanel Grid.Column="6" Orientation="Horizontal" Spacing="6"
+                                            HorizontalAlignment="Right" VerticalAlignment="Center">
+                                    <TextBlock Text="{Binding StatusText}" Classes="Mono"
+                                               VerticalAlignment="Center"
+                                               Foreground="{DynamicResource Text4Brush}"
+                                               IsVisible="{Binding !CanRevert}"
+                                               Margin="0,0,4,0"/>
+                                    <Button Content="[ DIR ]"
+                                            Command="{Binding OpenFolderCommand}"
+                                            ToolTip.Tip="Open Explorer at the source archive"
+                                            FontSize="11" Padding="6,4"/>
+                                    <Button Content="[ INSTALL ]"
+                                            Command="{Binding InstallCommand}"
+                                            IsVisible="{Binding CanInstall}"
+                                            Classes="Accent"
+                                            FontSize="11" Padding="8,4"/>
+                                    <Button Content="[ REVERT ]"
+                                            Command="{Binding RequestRevertCommand}"
+                                            IsVisible="{Binding CanRevert}"
+                                            Foreground="{DynamicResource DndBrush}"
+                                            FontSize="11" Padding="8,4"/>
+                                    <Button Content="[ CONFIRM ]"
+                                            Command="{Binding ConfirmRevertCommand}"
+                                            IsVisible="{Binding ConfirmingRevert}"
+                                            Foreground="{DynamicResource DndBrush}"
+                                            FontSize="11" Padding="8,4"/>
+                                    <Button Content="[ x ]"
+                                            Command="{Binding CancelRevertCommand}"
+                                            IsVisible="{Binding ConfirmingRevert}"
+                                            FontSize="11" Padding="8,4"/>
+                                </StackPanel>
+                            </Grid>
+                        </DataTemplate>
+                    </ListBox.ItemTemplate>
+                </ListBox>
+            </StackPanel>
+        </Border>
+    </StackPanel>
+</UserControl>

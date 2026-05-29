@@ -1,0 +1,80 @@
+name: Release
+
+on:
+  push:
+    tags: [ 'v*' ]   # any tag starting with v, e.g. v0.2.0
+
+jobs:
+  release:
+    runs-on: windows-latest
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Setup .NET 8
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: '8.0.x'
+
+      - name: Derive version
+        id: ver
+        shell: pwsh
+        run: |
+          $tag = "${{ github.ref_name }}"
+          $version = $tag.TrimStart('v')
+          "version=$version" | Out-File -FilePath $env:GITHUB_OUTPUT -Append
+
+      - name: Build + test
+        run: |
+          dotnet restore CPMM2067.sln
+          dotnet build CPMM2067.sln -c Release --no-restore /p:Version=${{ steps.ver.outputs.version }}
+          dotnet test tests/CPMM2067.Tests --no-build -c Release
+
+      - name: Publish self-contained .exe
+        run: |
+          dotnet publish src/CPMM2067.App/CPMM2067.App.csproj `
+            -c Release -r win-x64 --self-contained true `
+            /p:PublishSingleFile=true `
+            /p:IncludeNativeLibrariesForSelfExtract=true `
+            /p:Version=${{ steps.ver.outputs.version }} `
+            -o publish/win-x64
+
+      - name: Install Inno Setup
+        run: choco install innosetup -y --no-progress
+
+      - name: Build Inno Setup installer
+        shell: pwsh
+        run: |
+          $iscc = "C:\Program Files (x86)\Inno Setup 6\ISCC.exe"
+          & $iscc /DMyAppVersion=${{ steps.ver.outputs.version }} packaging/install.iss
+          if ($LASTEXITCODE -ne 0) { exit 1 }
+
+      - name: Install Velopack CLI
+        run: dotnet tool install -g vpk
+
+      - name: Pack Velopack release
+        shell: pwsh
+        run: |
+          vpk pack `
+            --packId CPMM2067 `
+            --packVersion ${{ steps.ver.outputs.version }} `
+            --packDir publish/win-x64 `
+            --mainExe CPMM2067.App.exe `
+            --outputDir publish/velopack
+
+      - name: Stage release assets
+        shell: pwsh
+        run: |
+          mkdir release-assets -Force
+          Copy-Item packaging/Output/*.exe release-assets/ -ErrorAction SilentlyContinue
+          Copy-Item publish/velopack/* release-assets/ -ErrorAction SilentlyContinue
+          # Also a zip of the single-file publish for portable users
+          Compress-Archive -Path publish/win-x64/* -DestinationPath release-assets/CPMM2067-${{ steps.ver.outputs.version }}-portable.zip
+
+      - name: Create GitHub Release
+        uses: softprops/action-gh-release@v2
+        with:
+          files: release-assets/*
+          generate_release_notes: true
+          name: CPMM2067 ${{ steps.ver.outputs.version }}

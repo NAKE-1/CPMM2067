@@ -1,0 +1,52 @@
+# ── build output ────────────────────────────────────────────────
+bin/
+obj/
+publish/
+artifacts/
+out/
+TestResults/
+*.user
+*.lock.json
+
+# ── IDE & OS noise ──────────────────────────────────────────────
+.vs/
+.vscode/
+.idea/
+*.DotSettings.user
+.DS_Store
+Thumbs.db
+
+# ── secrets — keep .env.example committed, never .env ───────────
+.env
+.env.local
+.env.*.local
+*.pfx
+*.snk
+
+# ── portable app data (lives next to the published exe) ─────────
+# In dev this falls under bin/, but in case someone publishes to repo root
+# or copies the runtime exe out, exclude the runtime state explicitly.
+data/
+**/data/settings.json
+**/data/logs/
+**/data/cache/
+**/data/journal/
+**/data/backups/
+**/data/exports/
+**/data/testing/
+**/data/profiles/
+backups/
+
+# ── local test fixtures (we don't ship the fake game tree) ──────
+testgame/
+testgame/**
+
+# ── release packaging artifacts ─────────────────────────────────
+packaging/Output/
+packaging/*.exe
+*.iss.bak
+
+# ── misc ────────────────────────────────────────────────────────
+*.log
+*.tlog
+nuget.config.user

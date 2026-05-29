@@ -1,0 +1,35 @@
+<Window xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        x:Class="CPMM2067.App.Views.ConfirmDialog"
+        Width="640" Height="460"
+        MinWidth="500" MinHeight="320"
+        Background="{DynamicResource Bg4Brush}"
+        Title="CPMM2067 — confirm"
+        WindowStartupLocation="CenterOwner"
+        CanResize="True">
+
+    <DockPanel Margin="18">
+        <TextBlock DockPanel.Dock="Top" Name="TitleText"
+                   Classes="Heading" Margin="0,0,0,6"/>
+
+        <TextBlock DockPanel.Dock="Top" Name="HeadlineText"
+                   Classes="PanelLabel"/>
+
+        <StackPanel DockPanel.Dock="Bottom" Orientation="Horizontal"
+                    HorizontalAlignment="Right" Spacing="10" Margin="0,12,0,0">
+            <Button Name="PrimaryButton" Classes="Accent"/>
+            <Button Name="SecondaryButton"/>
+            <Button Name="CancelButton" Content="[ cancel ]"/>
+        </StackPanel>
+
+        <Border Classes="Panel" Margin="0,10">
+            <ScrollViewer>
+                <TextBlock Name="BodyText"
+                           Classes="Mono"
+                           Foreground="{DynamicResource Text3Brush}"
+                           TextWrapping="Wrap"
+                           FontSize="11"/>
+            </ScrollViewer>
+        </Border>
+    </DockPanel>
+</Window>

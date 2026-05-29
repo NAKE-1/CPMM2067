@@ -1,0 +1,84 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:vm="using:CPMM2067.App.ViewModels"
+             x:Class="CPMM2067.App.Views.LoadOrderView"
+             x:DataType="vm:LoadOrderViewModel">
+    <ScrollViewer HorizontalScrollBarVisibility="Disabled" VerticalScrollBarVisibility="Auto">
+    <StackPanel Spacing="12" Margin="0,0,0,40">
+        <TextBlock Classes="PanelLabel" Text="// LOAD ORDER"/>
+        <TextBlock Classes="Heading" Text="resolution order"/>
+
+        <Border Classes="Panel">
+            <TabControl>
+                <TabItem Header="REDMOD">
+                    <StackPanel Spacing="10" Margin="0,10,0,0">
+                        <StackPanel Orientation="Horizontal" Spacing="10">
+                            <Button Content="[ refresh ]" Command="{Binding RefreshCommand}"/>
+                            <Button Classes="Accent" Content="[ SAVE ORDER ]"
+                                    Command="{Binding SaveOrderCommand}"
+                                    IsEnabled="{Binding HasUnsavedChanges}"/>
+                            <TextBlock Classes="Mono" VerticalAlignment="Center"
+                                       Text="{Binding RedmodStatus}"
+                                       Foreground="{DynamicResource Accent1Brush}"/>
+                        </StackPanel>
+                        <TextBlock Classes="Sub" TextWrapping="Wrap"
+                                   Text="Lower index = loads earlier. Click ▲/▼ to reorder, toggle the checkbox to enable/disable, then [ SAVE ORDER ] writes mods.json. Order takes effect on next [ DEPLOY + PLAY ]."/>
+
+                        <Grid ColumnDefinitions="40,*,80,80,80" Margin="0,4,0,4">
+                            <TextBlock Grid.Column="0" Classes="PanelLabel" Text="#"/>
+                            <TextBlock Grid.Column="1" Classes="PanelLabel" Text="FOLDER"/>
+                            <TextBlock Grid.Column="2" Classes="PanelLabel" Text="ENABLED"/>
+                            <TextBlock Grid.Column="3" Classes="PanelLabel" Text="UP" HorizontalAlignment="Center"/>
+                            <TextBlock Grid.Column="4" Classes="PanelLabel" Text="DOWN" HorizontalAlignment="Center"/>
+                        </Grid>
+
+                        <ItemsControl ItemsSource="{Binding RedMod}">
+                            <ItemsControl.ItemTemplate>
+                                <DataTemplate x:DataType="vm:RedModRow">
+                                    <Border Background="{DynamicResource Bg3Brush}"
+                                            BorderBrush="{DynamicResource BorderBrush}"
+                                            BorderThickness="0,0,0,1"
+                                            Padding="6,4">
+                                        <Grid ColumnDefinitions="40,*,80,80,80">
+                                            <TextBlock Grid.Column="0" Text="{Binding Index}" Classes="Mono"
+                                                       Foreground="{DynamicResource Text5Brush}"
+                                                       VerticalAlignment="Center"/>
+                                            <TextBlock Grid.Column="1" Text="{Binding Folder}"
+                                                       Foreground="{DynamicResource Text2Brush}"
+                                                       VerticalAlignment="Center"/>
+                                            <CheckBox Grid.Column="2"
+                                                      IsChecked="{Binding Enabled, Mode=TwoWay}"
+                                                      VerticalAlignment="Center"
+                                                      HorizontalAlignment="Center"/>
+                                            <Button Grid.Column="3"
+                                                    Content="[ ▲ ]"
+                                                    Command="{Binding MoveUpCommand}"
+                                                    HorizontalAlignment="Center"
+                                                    FontSize="11" Padding="8,2"/>
+                                            <Button Grid.Column="4"
+                                                    Content="[ ▼ ]"
+                                                    Command="{Binding MoveDownCommand}"
+                                                    HorizontalAlignment="Center"
+                                                    FontSize="11" Padding="8,2"/>
+                                        </Grid>
+                                    </Border>
+                                </DataTemplate>
+                            </ItemsControl.ItemTemplate>
+                        </ItemsControl>
+
+                        <TextBlock Classes="Muted" FontSize="11"
+                                   Text="(no REDmod folders found in mods/ or mods.json)"
+                                   IsVisible="{Binding RedMod.Count, Converter={x:Static ObjectConverters.Equal}, ConverterParameter=0}"/>
+                    </StackPanel>
+                </TabItem>
+                <TabItem Header="LEGACY .ARCHIVE" IsEnabled="False">
+                    <TextBlock Classes="Muted" Margin="0,10,0,0" Text="{Binding LegacyArchiveTabMessage}"/>
+                </TabItem>
+                <TabItem Header="RED4EXT" IsEnabled="False">
+                    <TextBlock Classes="Muted" Margin="0,10,0,0" Text="{Binding Red4extTabMessage}"/>
+                </TabItem>
+            </TabControl>
+        </Border>
+    </StackPanel>
+    </ScrollViewer>
+</UserControl>

@@ -1,0 +1,91 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:vm="using:CPMM2067.App.ViewModels"
+             x:Class="CPMM2067.App.Views.LoadReportView"
+             x:DataType="vm:LoadReportViewModel">
+    <ScrollViewer HorizontalScrollBarVisibility="Disabled" VerticalScrollBarVisibility="Auto">
+    <StackPanel Spacing="14" Margin="0,0,0,40">
+        <TextBlock Classes="PanelLabel" Text="// LOAD REPORT"/>
+        <TextBlock Classes="Heading" Text="what actually loaded"/>
+
+        <StackPanel Orientation="Horizontal" Spacing="10">
+            <Button Classes="Accent" Content="[ REFRESH ]" Command="{Binding RefreshCommand}"/>
+            <TextBlock Classes="Mono" VerticalAlignment="Center"
+                       Text="{Binding Status}"
+                       Foreground="{DynamicResource Accent1Brush}"/>
+        </StackPanel>
+
+        <Border Classes="Panel">
+            <StackPanel Spacing="6">
+                <TextBlock Classes="PanelLabel" Text="[ HOW THIS WORKS ]"/>
+                <TextBlock Classes="Sub" TextWrapping="Wrap">
+                    Parses every loader log (CET, RED4ext, redscript, REDmod metadata) and cross-references
+                    with the disk scan. Distinguishes mods that are present AND loaded (green), present but
+                    not loaded (yellow — usually missing deps or version mismatch), and load-log entries that
+                    reference a mod no longer on disk (stale, gray).
+                </TextBlock>
+                <TextBlock Classes="Mono" FontSize="11" Foreground="{DynamicResource Text4Brush}" xml:space="preserve">CET log     : bin\x64\plugins\cyber_engine_tweaks\cyber_engine_tweaks.log
+RED4ext     : red4ext\logs\*.log     (most recent)
+redscript   : r6\cache\redscript_rCURRENT.log
+REDmod      : tools\redmod\metadata.json (after deploy)</TextBlock>
+            </StackPanel>
+        </Border>
+
+        <Border Classes="Panel">
+            <StackPanel Spacing="10">
+                <TextBlock Classes="PanelLabel" Text="[ MOD STATUS ]"/>
+
+                <Grid ColumnDefinitions="110,*,90,110,*" Margin="0,4,0,4">
+                    <TextBlock Grid.Column="0" Classes="PanelLabel" Text="VERDICT"/>
+                    <TextBlock Grid.Column="1" Classes="PanelLabel" Text="NAME"/>
+                    <TextBlock Grid.Column="2" Classes="PanelLabel" Text="VERSION"/>
+                    <TextBlock Grid.Column="3" Classes="PanelLabel" Text="SOURCE"/>
+                    <TextBlock Grid.Column="4" Classes="PanelLabel" Text="DETAIL"/>
+                </Grid>
+
+                <ItemsControl ItemsSource="{Binding Rows}">
+                    <ItemsControl.ItemTemplate>
+                        <DataTemplate x:DataType="vm:LoadReportRow">
+                            <Border Background="{DynamicResource Bg3Brush}"
+                                    BorderBrush="{DynamicResource BorderBrush}"
+                                    BorderThickness="0,0,0,1"
+                                    Padding="6,4">
+                                <Grid ColumnDefinitions="110,*,90,110,*">
+                                    <Border Grid.Column="0"
+                                            Background="{Binding PillBrush}"
+                                            Padding="6,2" Margin="0,0,8,0"
+                                            VerticalAlignment="Center">
+                                        <TextBlock Text="{Binding Verdict}"
+                                                   Foreground="{DynamicResource Bg4Brush}"
+                                                   FontSize="10" FontWeight="SemiBold"
+                                                   HorizontalAlignment="Center"/>
+                                    </Border>
+                                    <TextBlock Grid.Column="1" Text="{Binding Name}"
+                                               Foreground="{DynamicResource Text2Brush}"
+                                               VerticalAlignment="Center"
+                                               TextTrimming="CharacterEllipsis"/>
+                                    <TextBlock Grid.Column="2" Text="{Binding Version}"
+                                               Classes="Mono" VerticalAlignment="Center"/>
+                                    <TextBlock Grid.Column="3" Text="{Binding Source}"
+                                               Classes="Mono"
+                                               Foreground="{DynamicResource Accent1Brush}"
+                                               VerticalAlignment="Center"/>
+                                    <TextBlock Grid.Column="4" Text="{Binding Detail}"
+                                               Classes="Mono" FontSize="11"
+                                               Foreground="{DynamicResource Text4Brush}"
+                                               TextTrimming="CharacterEllipsis"
+                                               VerticalAlignment="Center"/>
+                                </Grid>
+                            </Border>
+                        </DataTemplate>
+                    </ItemsControl.ItemTemplate>
+                </ItemsControl>
+
+                <TextBlock Classes="Muted" FontSize="11"
+                           Text="(no entries — load logs may be missing if the game hasn't started yet with these loaders)"
+                           IsVisible="{Binding Rows.Count, Converter={x:Static ObjectConverters.Equal}, ConverterParameter=0}"/>
+            </StackPanel>
+        </Border>
+    </StackPanel>
+    </ScrollViewer>
+</UserControl>

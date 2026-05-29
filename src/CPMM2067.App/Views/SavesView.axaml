@@ -1,0 +1,91 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:vm="using:CPMM2067.App.ViewModels"
+             x:Class="CPMM2067.App.Views.SavesView"
+             x:DataType="vm:SavesViewModel">
+    <DockPanel>
+        <StackPanel DockPanel.Dock="Top" Spacing="10" Margin="0,0,0,12">
+            <TextBlock Classes="PanelLabel" Text="// SAVES"/>
+            <TextBlock Classes="Heading" Text="save backups"/>
+            <StackPanel Orientation="Horizontal" Spacing="10">
+                <Button Content="[ refresh ]" Command="{Binding RefreshCommand}"/>
+                <Button Content="[ open saves dir ]" Command="{Binding OpenSavesFolderCommand}"/>
+                <Button Content="[ open backups dir ]" Command="{Binding OpenDefaultBackupRootCommand}"/>
+                <TextBlock Classes="Mono" VerticalAlignment="Center"
+                           Text="{Binding Status}"
+                           Foreground="{DynamicResource Accent1Brush}"/>
+            </StackPanel>
+            <TextBlock Classes="Sub" TextWrapping="Wrap">
+                Saves source: <Run Text="{Binding SavesPath}"/>
+            </TextBlock>
+            <TextBlock Classes="Sub" TextWrapping="Wrap">
+                Backups go to: <Run Text="{Binding BackupRoot}"/>
+            </TextBlock>
+        </StackPanel>
+
+        <ScrollViewer>
+            <ItemsControl ItemsSource="{Binding Saves}">
+                <ItemsControl.ItemTemplate>
+                    <DataTemplate x:DataType="vm:SaveRow">
+                        <Border Classes="Panel" Margin="0,4">
+                            <Grid ColumnDefinitions="180,*,Auto">
+                                <Border Grid.Column="0" Width="160" Height="90"
+                                        Background="{DynamicResource Bg2Brush}"
+                                        BorderBrush="{DynamicResource BorderBrush}"
+                                        BorderThickness="2">
+                                    <Image Source="{Binding Thumbnail}" Stretch="UniformToFill"/>
+                                </Border>
+                                <StackPanel Grid.Column="1" Margin="14,0" VerticalAlignment="Center" Spacing="4">
+                                    <TextBlock Text="{Binding Name}"
+                                               Foreground="{DynamicResource Text1Brush}"
+                                               FontWeight="SemiBold"
+                                               IsVisible="{Binding !IsRenaming}"/>
+                                    <StackPanel Orientation="Horizontal" Spacing="6"
+                                                IsVisible="{Binding IsRenaming}">
+                                        <TextBox Text="{Binding RenameBuffer, Mode=TwoWay}"
+                                                 Width="280"/>
+                                        <Button Content="[ ✓ ]" Command="{Binding ConfirmRenameCommand}"
+                                                FontSize="11" Padding="6,2"/>
+                                        <Button Content="[ x ]" Command="{Binding CancelRenameCommand}"
+                                                FontSize="11" Padding="6,2"/>
+                                    </StackPanel>
+                                    <TextBlock Classes="Sub" Text="{Binding LastModified}"/>
+                                    <TextBlock Classes="Muted" FontSize="11" Text="{Binding Path}"
+                                               TextTrimming="CharacterEllipsis"/>
+                                </StackPanel>
+                                <StackPanel Grid.Column="2" Orientation="Horizontal"
+                                            Spacing="6" VerticalAlignment="Center">
+                                    <Button Content="[ open ]"
+                                            Command="{Binding OpenFolderCommand}"
+                                            FontSize="11" Padding="6,4"/>
+                                    <Button Content="[ rename ]"
+                                            Command="{Binding StartRenameCommand}"
+                                            IsVisible="{Binding !IsRenaming}"
+                                            FontSize="11" Padding="6,4"/>
+                                    <Button Content="[ duplicate ]"
+                                            Command="{Binding DuplicateCommand}"
+                                            FontSize="11" Padding="6,4"/>
+                                    <Button Content="[ INSPECT ]"
+                                            Command="{Binding InspectCommand}"
+                                            ToolTip.Tip="Scan the save for mod fingerprints"
+                                            FontSize="11" Padding="6,4"/>
+                                    <Button Content="[ EDIT ]"
+                                            Command="{Binding EditInCyberCatCommand}"
+                                            ToolTip.Tip="Open this save in CyberCAT-SimpleGUI (configure path in Save editor sidebar)"
+                                            FontSize="11" Padding="6,4"/>
+                                    <Button Classes="Accent" Content="[ BACKUP ]"
+                                            Command="{Binding BackupCommand}"
+                                            FontSize="11" Padding="8,4"/>
+                                    <Button Content="[ delete ]"
+                                            Command="{Binding DeleteCommand}"
+                                            Foreground="{DynamicResource DndBrush}"
+                                            FontSize="11" Padding="6,4"/>
+                                </StackPanel>
+                            </Grid>
+                        </Border>
+                    </DataTemplate>
+                </ItemsControl.ItemTemplate>
+            </ItemsControl>
+        </ScrollViewer>
+    </DockPanel>
+</UserControl>

@@ -1,0 +1,140 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:vm="using:CPMM2067.App.ViewModels"
+             x:Class="CPMM2067.App.Views.ConflictsView"
+             x:DataType="vm:ConflictsViewModel">
+    <ScrollViewer HorizontalScrollBarVisibility="Disabled" VerticalScrollBarVisibility="Auto">
+    <StackPanel Spacing="14" Margin="0,0,0,40">
+        <TextBlock Classes="PanelLabel" Text="// CONFLICTS"/>
+        <TextBlock Classes="Heading" Text="file conflicts"/>
+
+        <StackPanel Orientation="Horizontal" Spacing="10">
+            <Button Classes="Accent" Content="[ SCAN JOURNAL ]" Command="{Binding RefreshCommand}"/>
+            <TextBlock Classes="Mono" VerticalAlignment="Center"
+                       Text="{Binding Status}"
+                       Foreground="{DynamicResource Accent1Brush}"/>
+        </StackPanel>
+
+        <Border Classes="Panel">
+            <StackPanel Spacing="6">
+                <TextBlock Classes="PanelLabel" Text="[ HOW THIS WORKS ]"/>
+                <TextBlock Classes="Sub" TextWrapping="Wrap">
+                    Every install writes a journal entry with its complete file list. This view groups those
+                    lists by relative path and flags any path that appears in more than one Installed entry.
+                    For REDmod conflicts, the file currently on disk is whichever entry was applied last
+                    ("winner on disk"). For legacy .archive files, the first one ASCII-wise wins at game-load
+                    time — order them with NN_ prefixes from the Load order page.
+                </TextBlock>
+            </StackPanel>
+        </Border>
+
+        <Border Classes="Panel">
+            <StackPanel Spacing="10">
+                <TextBlock Classes="PanelLabel" Text="[ DEEP SCAN — SEMANTIC CONFLICTS ]"/>
+                <TextBlock Classes="Mono" Text="{Binding DeepStatus}"
+                           Foreground="{DynamicResource Accent1Brush}"/>
+                <TextBlock Classes="Sub" TextWrapping="Wrap">
+                    Goes beyond filename collisions. For TweakXL, opens every r6\tweaks\*.yaml and groups by
+                    top-level key. For redscript, scans r6\scripts\**\*.reds for @addMethod / @replaceMethod /
+                    @wrapMethod annotations and groups by class+method. A key or hook defined by more than one
+                    file is flagged below.
+                </TextBlock>
+
+                <TextBlock Classes="PanelLabel" Text="[ TWEAKXL KEY COLLISIONS ]" Margin="0,8,0,0"/>
+                <ItemsControl ItemsSource="{Binding TweakConflicts}">
+                    <ItemsControl.ItemTemplate>
+                        <DataTemplate x:DataType="vm:DeepConflictRow">
+                            <Border Background="{DynamicResource Bg3Brush}"
+                                    BorderBrush="{DynamicResource BorderBrush}"
+                                    BorderThickness="0,0,0,1" Padding="6,4">
+                                <Grid ColumnDefinitions="*,60,2*">
+                                    <TextBlock Grid.Column="0" Text="{Binding Key}" Classes="Mono"
+                                               Foreground="{DynamicResource Text2Brush}"/>
+                                    <TextBlock Grid.Column="1" Text="{Binding FileCount}" Classes="Mono"
+                                               Foreground="{DynamicResource DndBrush}"/>
+                                    <TextBlock Grid.Column="2" Text="{Binding Files}" Classes="Mono" FontSize="11"
+                                               Foreground="{DynamicResource Text4Brush}"
+                                               TextWrapping="Wrap"/>
+                                </Grid>
+                            </Border>
+                        </DataTemplate>
+                    </ItemsControl.ItemTemplate>
+                </ItemsControl>
+                <TextBlock Classes="Muted" FontSize="11"
+                           Text="(no TweakXL key collisions)"
+                           IsVisible="{Binding TweakConflicts.Count, Converter={x:Static ObjectConverters.Equal}, ConverterParameter=0}"/>
+
+                <TextBlock Classes="PanelLabel" Text="[ REDSCRIPT HOOK COLLISIONS ]" Margin="0,8,0,0"/>
+                <ItemsControl ItemsSource="{Binding RedsConflicts}">
+                    <ItemsControl.ItemTemplate>
+                        <DataTemplate x:DataType="vm:DeepConflictRow">
+                            <Border Background="{DynamicResource Bg3Brush}"
+                                    BorderBrush="{DynamicResource BorderBrush}"
+                                    BorderThickness="0,0,0,1" Padding="6,4">
+                                <Grid ColumnDefinitions="*,60,2*">
+                                    <TextBlock Grid.Column="0" Text="{Binding Key}" Classes="Mono"
+                                               Foreground="{DynamicResource Text2Brush}"/>
+                                    <TextBlock Grid.Column="1" Text="{Binding FileCount}" Classes="Mono"
+                                               Foreground="{DynamicResource DndBrush}"/>
+                                    <TextBlock Grid.Column="2" Text="{Binding Files}" Classes="Mono" FontSize="11"
+                                               Foreground="{DynamicResource Text4Brush}"
+                                               TextWrapping="Wrap"/>
+                                </Grid>
+                            </Border>
+                        </DataTemplate>
+                    </ItemsControl.ItemTemplate>
+                </ItemsControl>
+                <TextBlock Classes="Muted" FontSize="11"
+                           Text="(no redscript hook collisions)"
+                           IsVisible="{Binding RedsConflicts.Count, Converter={x:Static ObjectConverters.Equal}, ConverterParameter=0}"/>
+            </StackPanel>
+        </Border>
+
+        <Border Classes="Panel">
+            <StackPanel Spacing="10">
+                <TextBlock Classes="PanelLabel" Text="[ CONFLICTING PATHS ]"/>
+
+                <Grid ColumnDefinitions="*,80,*,200" Margin="0,4,0,4">
+                    <TextBlock Grid.Column="0" Classes="PanelLabel" Text="PATH"/>
+                    <TextBlock Grid.Column="1" Classes="PanelLabel" Text="MODS"/>
+                    <TextBlock Grid.Column="2" Classes="PanelLabel" Text="INVOLVED"/>
+                    <TextBlock Grid.Column="3" Classes="PanelLabel" Text="ON DISK"/>
+                </Grid>
+
+                <ItemsControl ItemsSource="{Binding Conflicts}">
+                    <ItemsControl.ItemTemplate>
+                        <DataTemplate x:DataType="vm:ConflictRow">
+                            <Border Background="{DynamicResource Bg3Brush}"
+                                    BorderBrush="{DynamicResource BorderBrush}"
+                                    BorderThickness="0,0,0,1"
+                                    Padding="6,4">
+                                <Grid ColumnDefinitions="*,80,*,200">
+                                    <TextBlock Grid.Column="0" Text="{Binding Path}" Classes="Mono"
+                                               Foreground="{DynamicResource Text2Brush}"
+                                               TextTrimming="CharacterEllipsis"
+                                               VerticalAlignment="Center"/>
+                                    <TextBlock Grid.Column="1" Text="{Binding ModCount}" Classes="Mono"
+                                               Foreground="{DynamicResource DndBrush}"
+                                               VerticalAlignment="Center"/>
+                                    <TextBlock Grid.Column="2" Text="{Binding Mods}" Classes="Mono"
+                                               Foreground="{DynamicResource Text4Brush}"
+                                               TextTrimming="CharacterEllipsis"
+                                               VerticalAlignment="Center"/>
+                                    <TextBlock Grid.Column="3" Text="{Binding WinnerOnDisk}" Classes="Mono"
+                                               Foreground="{DynamicResource Accent1Brush}"
+                                               TextTrimming="CharacterEllipsis"
+                                               VerticalAlignment="Center"/>
+                                </Grid>
+                            </Border>
+                        </DataTemplate>
+                    </ItemsControl.ItemTemplate>
+                </ItemsControl>
+
+                <TextBlock Classes="Muted" FontSize="11"
+                           Text="(no conflicts detected)"
+                           IsVisible="{Binding Conflicts.Count, Converter={x:Static ObjectConverters.Equal}, ConverterParameter=0}"/>
+            </StackPanel>
+        </Border>
+    </StackPanel>
+    </ScrollViewer>
+</UserControl>

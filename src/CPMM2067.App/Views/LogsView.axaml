@@ -1,0 +1,91 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:vm="using:CPMM2067.App.ViewModels"
+             xmlns:diag="using:CPMM2067.Diagnostics"
+             x:Class="CPMM2067.App.Views.LogsView"
+             x:DataType="vm:LogsViewModel">
+    <ScrollViewer HorizontalScrollBarVisibility="Disabled" VerticalScrollBarVisibility="Auto">
+    <StackPanel Spacing="14" Margin="0,0,0,40">
+        <TextBlock Classes="PanelLabel" Text="// LOGS"/>
+        <TextBlock Classes="Heading" Text="diagnostics"/>
+
+        <StackPanel Orientation="Horizontal" Spacing="10">
+            <Button Classes="Accent" Content="[ CREATE DIAGNOSTIC BUNDLE ]" Command="{Binding CreateBundleCommand}"/>
+            <TextBlock Classes="Mono" VerticalAlignment="Center" Text="{Binding BundleStatus}"
+                       Foreground="{DynamicResource Accent1Brush}"/>
+        </StackPanel>
+
+        <!-- GAME LOGS PANEL -->
+        <Border Classes="Panel">
+            <DockPanel>
+                <Grid DockPanel.Dock="Top" ColumnDefinitions="*,Auto,Auto" Margin="0,0,0,8">
+                    <TextBlock Grid.Column="0" Classes="PanelLabel" Text="[ GAME LOGS ]"/>
+                    <Button Grid.Column="1" Content="[ refresh ]" Command="{Binding RefreshGameLogsCommand}" Margin="0,0,6,0"/>
+                    <Button Grid.Column="2" Content="[ open install ]" Command="{Binding OpenLogFolderCommand}"/>
+                </Grid>
+                <TextBlock DockPanel.Dock="Top" Classes="Sub" Margin="0,0,0,8" Text="{Binding GameLogStatus}"/>
+
+                <Grid ColumnDefinitions="320,8,*" Height="360">
+                    <ListBox Grid.Column="0" ItemsSource="{Binding GameLogs}"
+                             SelectedItem="{Binding SelectedGameLog, Mode=TwoWay}">
+                        <ListBox.ItemTemplate>
+                            <DataTemplate x:DataType="diag:GameLogFile">
+                                <StackPanel>
+                                    <TextBlock Text="{Binding DisplayName}" Classes="Mono"
+                                               Foreground="{DynamicResource Text2Brush}"
+                                               TextTrimming="CharacterEllipsis"/>
+                                    <TextBlock Classes="Muted" FontSize="10">
+                                        <Run Text="{Binding Source}"/>
+                                        <Run Text=" • "/>
+                                        <Run Text="{Binding SizeBytes}"/>
+                                        <Run Text=" bytes"/>
+                                    </TextBlock>
+                                </StackPanel>
+                            </DataTemplate>
+                        </ListBox.ItemTemplate>
+                    </ListBox>
+
+                    <Border Grid.Column="2" BorderBrush="{DynamicResource BorderBrush}" BorderThickness="2"
+                            Background="{DynamicResource Bg3Brush}">
+                        <ScrollViewer>
+                            <TextBox Text="{Binding SelectedGameLogContent}"
+                                     IsReadOnly="True"
+                                     AcceptsReturn="True"
+                                     TextWrapping="NoWrap"
+                                     BorderThickness="0"
+                                     Background="Transparent"
+                                     FontFamily="{DynamicResource MonoFont}"
+                                     FontSize="11"
+                                     MinHeight="320"/>
+                        </ScrollViewer>
+                    </Border>
+                </Grid>
+            </DockPanel>
+        </Border>
+
+        <!-- APP LOG TAIL -->
+        <Border Classes="Panel">
+            <DockPanel>
+                <TextBlock DockPanel.Dock="Top" Classes="PanelLabel" Text="[ APP LIVE TAIL ]"/>
+                <ListBox ItemsSource="{Binding Lines}"
+                         BorderThickness="0"
+                         Background="Transparent"
+                         Height="260"
+                         FontFamily="{DynamicResource MonoFont}"
+                         FontSize="12">
+                    <ListBox.ItemTemplate>
+                        <DataTemplate>
+                            <TextBlock TextWrapping="NoWrap">
+                                <Run Text="["/>
+                                <Run Text="{Binding Level}" Foreground="{DynamicResource Accent1Brush}"/>
+                                <Run Text="] "/>
+                                <Run Text="{Binding Message}"/>
+                            </TextBlock>
+                        </DataTemplate>
+                    </ListBox.ItemTemplate>
+                </ListBox>
+            </DockPanel>
+        </Border>
+    </StackPanel>
+    </ScrollViewer>
+</UserControl>

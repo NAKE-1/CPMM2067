@@ -1,0 +1,86 @@
+<Window xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:vm="using:CPMM2067.App.ViewModels"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        mc:Ignorable="d" d:DesignWidth="1080" d:DesignHeight="680"
+        x:Class="CPMM2067.App.Views.MainWindow"
+        x:DataType="vm:MainWindowViewModel"
+        Width="1080" Height="680"
+        MinWidth="900" MinHeight="560"
+        Background="{DynamicResource Bg4Brush}"
+        Title="CPMM2067 :: cyberpunk 2077 mod manager">
+
+    <DockPanel>
+        <!-- status bar -->
+        <Border DockPanel.Dock="Bottom" Classes="StatusBar">
+            <Grid ColumnDefinitions="Auto,*,Auto,Auto,Auto">
+                <!-- queue tray (left) -->
+                <Button Grid.Column="0" Padding="0" Background="Transparent" BorderThickness="0"
+                        Command="{Binding ShowDownloadsCommand}"
+                        ToolTip.Tip="Open Downloads page">
+                    <StackPanel Orientation="Horizontal" Spacing="8">
+                        <TextBlock Classes="Mono" Text="{Binding QueueLabel}"
+                                   Foreground="{DynamicResource Accent1Brush}"
+                                   VerticalAlignment="Center"/>
+                        <ProgressBar Width="120" Height="6"
+                                     IsVisible="{Binding HasActiveJob}"
+                                     Minimum="0" Maximum="100"
+                                     Value="{Binding QueueProgress}"
+                                     IsIndeterminate="{Binding QueueIndeterminate}"
+                                     Foreground="{DynamicResource Accent2Brush}"
+                                     Background="{DynamicResource Bg2Brush}"
+                                     VerticalAlignment="Center"/>
+                        <TextBlock Classes="Mono" Text="{Binding QueueDetail}"
+                                   Foreground="{DynamicResource Text4Brush}"
+                                   TextTrimming="CharacterEllipsis" MaxWidth="500"
+                                   VerticalAlignment="Center"/>
+                    </StackPanel>
+                </Button>
+
+                <TextBlock Grid.Column="1" Classes="Sub" Text="{Binding StatusBar}"
+                           HorizontalAlignment="Center"/>
+
+                <TextBlock Grid.Column="3" Classes="Mono"
+                           Foreground="{DynamicResource Text5Brush}"
+                           Margin="0,0,12,0"
+                           Text="{Binding GameStatusDetail}"/>
+                <TextBlock Grid.Column="4" Classes="Mono"
+                           Foreground="{DynamicResource Accent1Brush}"
+                           Text="{Binding GameStatusLabel}"/>
+            </Grid>
+        </Border>
+
+        <!-- sidebar -->
+        <Border DockPanel.Dock="Left" Classes="Sidebar" Width="220">
+            <DockPanel>
+                <StackPanel DockPanel.Dock="Top" Margin="0,16,0,16">
+                    <TextBlock Classes="Ascii" Margin="20,0,0,0" xml:space="preserve">
+ ▄▖▄▖▖ ▖▖ ▖   ▄▖▄▖▄▖▄▖
+ ▌ ▙▌▛▖▞▌▛▖▞▌▄▖▌▌▙▌▙▌▌▌
+ ▙▖▌ ▌▝ ▌▌▝ ▌  ▙▌▙▌▙▌▛▘
+                  v0.1</TextBlock>
+                </StackPanel>
+
+                <TextBlock DockPanel.Dock="Top" Classes="PanelLabel" Margin="20,8,0,4" Text="// NAVIGATION"/>
+
+                <ItemsControl ItemsSource="{Binding NavItems}">
+                    <ItemsControl.ItemTemplate>
+                        <DataTemplate x:DataType="vm:NavItem">
+                            <Button Classes="Nav"
+                                    Command="{Binding Command}">
+                                <TextBlock>
+                                    <Run Text="› "/>
+                                    <Run Text="{Binding Title}"/>
+                                </TextBlock>
+                            </Button>
+                        </DataTemplate>
+                    </ItemsControl.ItemTemplate>
+                </ItemsControl>
+            </DockPanel>
+        </Border>
+
+        <!-- content (each view manages its own ScrollViewer) -->
+        <ContentControl Content="{Binding Current}" Padding="24,18"/>
+    </DockPanel>
+</Window>

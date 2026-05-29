@@ -1,0 +1,169 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:vm="using:CPMM2067.App.ViewModels"
+             x:Class="CPMM2067.App.Views.CollectionsView"
+             x:DataType="vm:CollectionsViewModel">
+    <ScrollViewer HorizontalScrollBarVisibility="Disabled" VerticalScrollBarVisibility="Auto">
+    <StackPanel Spacing="14" Margin="0,0,0,40">
+        <TextBlock Classes="PanelLabel" Text="// COLLECTIONS"/>
+        <TextBlock Classes="Heading" Text="nexus collections"/>
+
+        <Border Classes="Panel">
+            <StackPanel Spacing="8">
+                <TextBlock Classes="PanelLabel" Text="[ COLLECTION SOURCE ]"/>
+                <TextBox Text="{Binding SlugInput, Mode=TwoWay}"
+                         Tag="paste collection URL or slug (e.g. abc123)"/>
+                <StackPanel Orientation="Horizontal" Spacing="10">
+                    <Button Classes="Accent" Content="[ FETCH (needs JWT) ]" Command="{Binding FetchCommand}"/>
+                    <Button Content="[ LOAD COLLECTION FILE ]" Command="{Binding LoadCollectionFileCommand}"
+                            ToolTip.Tip="Pick a downloaded .collection/.zip/.json — no API auth for the manifest"/>
+                </StackPanel>
+                <TextBlock Classes="Mono" Text="{Binding Status}"
+                           Foreground="{DynamicResource Accent1Brush}"
+                           TextWrapping="Wrap"/>
+                <TextBlock Classes="Sub" TextWrapping="Wrap">
+                    Safe offline path: on the Nexus website, click the collection's "Download" button to save the
+                    .collection / .zip bundle. Then [ LOAD COLLECTION FILE ] above. The mod list parses locally;
+                    only per-mod file downloads need the API key (works with the free-tier key too).
+                </TextBlock>
+                <Expander Header="Show last error / response body"
+                          IsVisible="{Binding LastErrorDetail.Length}">
+                    <TextBox Text="{Binding LastErrorDetail}"
+                             IsReadOnly="True" AcceptsReturn="True" TextWrapping="NoWrap"
+                             FontFamily="{DynamicResource MonoFont}" FontSize="11"
+                             MaxHeight="240"/>
+                </Expander>
+            </StackPanel>
+        </Border>
+
+        <Border Classes="Panel" IsVisible="{Binding IsLoaded}">
+            <StackPanel Spacing="6">
+                <TextBlock Classes="PanelLabel" Text="[ COLLECTION ]"/>
+                <Grid ColumnDefinitions="120,*" RowDefinitions="Auto,Auto,Auto,Auto">
+                    <TextBlock Grid.Row="0" Grid.Column="0" Classes="Sub" Text="name"/>
+                    <TextBlock Grid.Row="0" Grid.Column="1" Text="{Binding CollectionName}"
+                               Foreground="{DynamicResource Text1Brush}"/>
+                    <TextBlock Grid.Row="1" Grid.Column="0" Classes="Sub" Text="author"/>
+                    <TextBlock Grid.Row="1" Grid.Column="1" Text="{Binding CollectionAuthor}"
+                               Foreground="{DynamicResource Text2Brush}"/>
+                    <TextBlock Grid.Row="2" Grid.Column="0" Classes="Sub" Text="revision"/>
+                    <TextBlock Grid.Row="2" Grid.Column="1" Text="{Binding CollectionRevision}"
+                               Foreground="{DynamicResource Text2Brush}"/>
+                    <TextBlock Grid.Row="3" Grid.Column="0" Classes="Sub" Text="summary"/>
+                    <TextBlock Grid.Row="3" Grid.Column="1" Text="{Binding CollectionSummary}"
+                               Foreground="{DynamicResource Text3Brush}" TextWrapping="Wrap"/>
+                </Grid>
+            </StackPanel>
+        </Border>
+
+        <Border Classes="Panel" IsVisible="{Binding IsLoaded}">
+            <StackPanel Spacing="6">
+                <TextBlock Classes="PanelLabel" Text="[ DOWNLOAD DIR ]"/>
+                <TextBox Text="{Binding DownloadRoot, Mode=TwoWay}"/>
+                <StackPanel Orientation="Horizontal" Spacing="10">
+                    <Button Content="[ pick dir… ]" Command="{Binding PickDownloadRootCommand}"/>
+                    <Button Content="[ open ]" Command="{Binding OpenDownloadRootCommand}"/>
+                    <TextBlock Classes="Sub" VerticalAlignment="Center"
+                               Text="Per-collection subfolder: &lt;name&gt;-r&lt;revision&gt;\"/>
+                </StackPanel>
+            </StackPanel>
+        </Border>
+
+        <StackPanel Orientation="Horizontal" Spacing="10" IsVisible="{Binding IsLoaded}">
+            <Button Classes="Accent" Content="[ DOWNLOAD ALL REQUIRED ]" Command="{Binding DownloadAllCommand}"/>
+            <Button Content="[ INSTALL ALL DOWNLOADED ]" Command="{Binding InstallAllCommand}"/>
+        </StackPanel>
+
+        <Border Classes="Panel" IsVisible="{Binding IsLoaded}"
+                Background="{DynamicResource Bg3Brush}"
+                BorderBrush="{DynamicResource IdleBrush}">
+            <StackPanel Spacing="6">
+                <TextBlock Classes="PanelLabel" Text="[ NEXUS DOWNLOAD POLICY ]"
+                           Foreground="{DynamicResource IdleBrush}"/>
+                <TextBlock Classes="Sub" TextWrapping="Wrap">
+                    Nexus only hands out download URLs to the public REST API for **premium** accounts. On a free
+                    account, [ DOWNLOAD ALL ] will fail with "Nexus did not return a download link" for every mod
+                    — the API requires per-click <Run Text="key" Foreground="{DynamicResource Accent1Brush}"/> +
+                    <Run Text="expires" Foreground="{DynamicResource Accent1Brush}"/> tokens that only the
+                    website generates when you press "Mod Manager Download" on a mod page.
+                </TextBlock>
+                <TextBlock Classes="Sub" TextWrapping="Wrap">
+                    Free-account workflow: click [ OPEN ] on each row → in the browser click "Mod Manager
+                    Download" → Windows routes the resulting nxm:// URL back into CPMM2067 (Downloads page
+                    shows progress). After all mods are downloaded, come back here and click
+                    [ INSTALL ALL DOWNLOADED ].
+                </TextBlock>
+            </StackPanel>
+        </Border>
+
+        <Border Classes="Panel" IsVisible="{Binding IsLoaded}">
+            <StackPanel Spacing="10">
+                <TextBlock Classes="PanelLabel" Text="[ MODS IN THIS COLLECTION ]"/>
+
+                <Grid ColumnDefinitions="*,*,90,90,200,160,140" Margin="0,4,0,4">
+                    <TextBlock Grid.Column="0" Classes="PanelLabel" Text="MOD"/>
+                    <TextBlock Grid.Column="1" Classes="PanelLabel" Text="FILE"/>
+                    <TextBlock Grid.Column="2" Classes="PanelLabel" Text="OPTIONAL"/>
+                    <TextBlock Grid.Column="3" Classes="PanelLabel" Text="IDS"/>
+                    <TextBlock Grid.Column="4" Classes="PanelLabel" Text="DOWNLOAD"/>
+                    <TextBlock Grid.Column="5" Classes="PanelLabel" Text="INSTALL"/>
+                    <TextBlock Grid.Column="6" Classes="PanelLabel" Text="ACTIONS"
+                               HorizontalAlignment="Right"/>
+                </Grid>
+
+                <ItemsControl ItemsSource="{Binding Mods}">
+                    <ItemsControl.ItemTemplate>
+                        <DataTemplate x:DataType="vm:CollectionModRow">
+                            <Border Background="{DynamicResource Bg3Brush}"
+                                    BorderBrush="{DynamicResource BorderBrush}"
+                                    BorderThickness="0,0,0,1" Padding="6,4">
+                                <Grid ColumnDefinitions="*,*,90,90,200,160,140">
+                                    <StackPanel Grid.Column="0" VerticalAlignment="Center">
+                                        <TextBlock Text="{Binding ModName}"
+                                                   Foreground="{DynamicResource Text2Brush}"
+                                                   TextTrimming="CharacterEllipsis"/>
+                                        <TextBlock Text="{Binding Author}" Classes="Muted" FontSize="10"/>
+                                    </StackPanel>
+                                    <TextBlock Grid.Column="1" Text="{Binding FileName}" Classes="Mono"
+                                               Foreground="{DynamicResource Text4Brush}"
+                                               TextTrimming="CharacterEllipsis"
+                                               VerticalAlignment="Center"/>
+                                    <TextBlock Grid.Column="2" Text="{Binding OptionalLabel}" Classes="Mono"
+                                               Foreground="{Binding OptionalBrush}"
+                                               FontSize="11"
+                                               VerticalAlignment="Center"/>
+                                    <TextBlock Grid.Column="3" Text="{Binding IdLabel}" Classes="Mono"
+                                               Foreground="{DynamicResource Text5Brush}"
+                                               FontSize="11"
+                                               VerticalAlignment="Center"/>
+                                    <TextBlock Grid.Column="4" Text="{Binding DownloadStatus}" Classes="Mono"
+                                               Foreground="{Binding DownloadBrush}"
+                                               TextTrimming="CharacterEllipsis"
+                                               ToolTip.Tip="{Binding DownloadStatus}"
+                                               VerticalAlignment="Center"/>
+                                    <TextBlock Grid.Column="5" Text="{Binding InstallStatus}" Classes="Mono"
+                                               Foreground="{Binding InstallBrush}"
+                                               TextTrimming="CharacterEllipsis"
+                                               ToolTip.Tip="{Binding InstallStatus}"
+                                               VerticalAlignment="Center"/>
+                                    <StackPanel Grid.Column="6" Orientation="Horizontal" Spacing="4"
+                                                HorizontalAlignment="Right">
+                                        <Button Content="[ DL ]"
+                                                Command="{Binding DownloadCommand}"
+                                                ToolTip.Tip="Try API download (needs premium for free download tokens)"
+                                                FontSize="11" Padding="6,2"/>
+                                        <Button Content="[ OPEN ]"
+                                                Command="{Binding OpenOnNexusCommand}"
+                                                ToolTip.Tip="Open mod page on Nexus — click 'Mod Manager Download' there and the NXM URL routes back into CPMM2067"
+                                                FontSize="11" Padding="6,2"/>
+                                    </StackPanel>
+                                </Grid>
+                            </Border>
+                        </DataTemplate>
+                    </ItemsControl.ItemTemplate>
+                </ItemsControl>
+            </StackPanel>
+        </Border>
+    </StackPanel>
+    </ScrollViewer>
+</UserControl>

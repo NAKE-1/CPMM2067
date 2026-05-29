@@ -1,0 +1,112 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:vm="using:CPMM2067.App.ViewModels"
+             x:Class="CPMM2067.App.Views.SettingsView"
+             x:DataType="vm:SettingsViewModel">
+    <ScrollViewer HorizontalScrollBarVisibility="Disabled" VerticalScrollBarVisibility="Auto">
+        <StackPanel Spacing="14" Width="640" HorizontalAlignment="Left" Margin="0,0,0,40">
+            <TextBlock Classes="PanelLabel" Text="// SETTINGS"/>
+            <TextBlock Classes="Heading" Text="configuration"/>
+
+            <Border Classes="Panel">
+                <StackPanel Spacing="8">
+                    <TextBlock Classes="PanelLabel" Text="[ TESTING MODE ]"/>
+                    <CheckBox Content="dry-run installs (no files written; reports deps)"
+                              IsChecked="{Binding TestingMode, Mode=TwoWay}"/>
+                    <TextBlock Classes="Sub" TextWrapping="Wrap"
+                               Text="When on, [ INSTALL FROM ZIP ] only extracts to temp + records detection results in the install journal. Use this to confirm CPMM2067 recognises a mod and to surface its required frameworks (RED4ext / ArchiveXL / etc.) without touching the install."/>
+                </StackPanel>
+            </Border>
+
+            <Border Classes="Panel">
+                <StackPanel Spacing="8">
+                    <TextBlock Classes="PanelLabel" Text="[ STARTUP ]"/>
+                    <CheckBox Content="auto-scan the mods list whenever a game install is loaded"
+                              IsChecked="{Binding AutoScanOnStartup, Mode=TwoWay}"/>
+                </StackPanel>
+            </Border>
+
+            <Border Classes="Panel">
+                <StackPanel Spacing="8">
+                    <TextBlock Classes="PanelLabel" Text="[ NEXUS MODS API KEY ]"/>
+                    <TextBlock Classes="Sub" Text="Generate one at nexusmods.com → my account → api. Used for mod metadata + NXM downloads."/>
+                    <TextBox Text="{Binding NexusApiKey, Mode=TwoWay}" PasswordChar="•"/>
+                    <StackPanel Orientation="Horizontal" Spacing="10">
+                        <Button Content="[ validate ]" Command="{Binding ValidateNexusCommand}"/>
+                        <TextBlock Classes="Mono" VerticalAlignment="Center" Text="{Binding NexusStatus}"
+                                   Foreground="{DynamicResource Accent1Brush}"/>
+                    </StackPanel>
+                </StackPanel>
+            </Border>
+
+            <Border Classes="Panel">
+                <StackPanel Spacing="8">
+                    <TextBlock Classes="PanelLabel" Text="[ NEXUS JWT — REQUIRED FOR COLLECTIONS ]"/>
+                    <TextBlock Classes="Sub" TextWrapping="Wrap"
+                               Text="The personal API key above does NOT grant access to the v2 GraphQL Collections endpoint. To fetch collections you need a JWT from Nexus's OAuth flow. The easiest source today: log into nexusmods.com, open DevTools → Application → Cookies → copy the value of the 'nexusmods_session' or 'jwt' token. Paste it here. Leave blank if you don't use Collections."/>
+                    <TextBox Text="{Binding NexusJwt, Mode=TwoWay}" PasswordChar="•"/>
+                </StackPanel>
+            </Border>
+
+            <Border Classes="Panel">
+                <StackPanel Spacing="8">
+                    <TextBlock Classes="PanelLabel" Text="[ NXM PROTOCOL HANDLER ]"/>
+                    <TextBlock Classes="Sub"
+                               Text="Lets Nexus 'mod manager download' buttons send installs to CPMM2067."
+                               TextWrapping="Wrap"/>
+                    <StackPanel Orientation="Horizontal" Spacing="10">
+                        <Button Content="[ register ]" Command="{Binding RegisterNxmHandlerCommand}"/>
+                        <Button Content="[ unregister ]" Command="{Binding UnregisterNxmHandlerCommand}"/>
+                        <TextBlock Classes="Mono" VerticalAlignment="Center" Text="{Binding NxmHandlerStatus}"
+                                   Foreground="{DynamicResource Accent1Brush}"/>
+                    </StackPanel>
+                </StackPanel>
+            </Border>
+
+            <Border Classes="Panel">
+                <StackPanel Spacing="6">
+                    <TextBlock Classes="PanelLabel" Text="[ NEXUS API USAGE ]"/>
+                    <TextBlock Classes="Sub" TextWrapping="Wrap"
+                               Text="Updated after every Nexus REST call. Free tier is typically 100/hour + 2500/day; premium is much higher. (Nexus only has hourly + daily counters — no '5 hour' bucket.)"/>
+                    <Grid ColumnDefinitions="120,*" RowDefinitions="Auto,Auto,Auto">
+                        <TextBlock Grid.Row="0" Grid.Column="0" Classes="Sub" Text="daily"/>
+                        <TextBlock Grid.Row="0" Grid.Column="1" Classes="Mono"
+                                   Text="{Binding RateLimits.DailyDisplay}"
+                                   Foreground="{DynamicResource Text1Brush}"/>
+                        <TextBlock Grid.Row="1" Grid.Column="0" Classes="Sub" Text="hourly"/>
+                        <TextBlock Grid.Row="1" Grid.Column="1" Classes="Mono"
+                                   Text="{Binding RateLimits.HourlyDisplay}"
+                                   Foreground="{DynamicResource Text1Brush}"/>
+                        <TextBlock Grid.Row="2" Grid.Column="0" Classes="Sub" Text="session"/>
+                        <TextBlock Grid.Row="2" Grid.Column="1" Classes="Mono"
+                                   Text="{Binding RateLimits.SessionDisplay}"
+                                   Foreground="{DynamicResource Text3Brush}"/>
+                    </Grid>
+                </StackPanel>
+            </Border>
+
+            <Border Classes="Panel">
+                <StackPanel Spacing="8">
+                    <TextBlock Classes="PanelLabel" Text="[ PREFERRED BROWSER ]"/>
+                    <TextBlock Classes="Sub" TextWrapping="Wrap"
+                               Text="Used for [ OPEN ] on Collections + every URL CPMM2067 launches. Leave blank to use the Windows default. Auto-detect probes Chrome / Firefox / Brave / Opera / Vivaldi / LibreWolf in install paths (Edge only as last resort)."/>
+                    <TextBox Text="{Binding PreferredBrowserExe, Mode=TwoWay}"/>
+                    <StackPanel Orientation="Horizontal" Spacing="10">
+                        <Button Content="[ auto-detect ]" Command="{Binding AutoDetectBrowserCommand}"/>
+                        <Button Content="[ pick exe… ]" Command="{Binding PickBrowserExeCommand}"/>
+                        <Button Classes="Accent" Content="[ TEST ]" Command="{Binding TestBrowserCommand}"
+                                ToolTip.Tip="Opens https://example.com in whatever the OpenUrl helper picks — should NOT be Edge if anything else is configured."/>
+                    </StackPanel>
+                </StackPanel>
+            </Border>
+
+            <Border Classes="Panel">
+                <StackPanel Spacing="8">
+                    <TextBlock Classes="PanelLabel" Text="[ TELEMETRY ]"/>
+                    <CheckBox Content="send anonymous crash reports + feature usage (opt-in)"
+                              IsChecked="{Binding TelemetryEnabled, Mode=TwoWay}"/>
+                </StackPanel>
+            </Border>
+        </StackPanel>
+    </ScrollViewer>
+</UserControl>

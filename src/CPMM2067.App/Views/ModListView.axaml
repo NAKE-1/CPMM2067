@@ -1,0 +1,100 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:vm="using:CPMM2067.App.ViewModels"
+             x:Class="CPMM2067.App.Views.ModListView"
+             x:DataType="vm:ModListViewModel"
+             DragDrop.AllowDrop="True">
+    <ScrollViewer HorizontalScrollBarVisibility="Disabled" VerticalScrollBarVisibility="Auto">
+    <StackPanel Spacing="12" Margin="0,0,0,40">
+        <TextBlock Classes="PanelLabel" Text="// MODS"/>
+        <TextBlock Classes="Heading" Text="installed mods"/>
+
+        <StackPanel Orientation="Horizontal" Spacing="10">
+            <Button Classes="Accent" Content="[ SCAN ]" Command="{Binding ScanCommand}"/>
+            <Button Content="[ INSTALL FROM ZIP ]" Command="{Binding InstallFromPickerCommand}"/>
+            <Button Content="[ EXPORT JSON ]" Command="{Binding ExportJsonCommand}"
+                    ToolTip.Tip="Write the full mod list with files to data\exports\mods-&lt;timestamp&gt;.json"/>
+            <TextBlock Classes="Mono" VerticalAlignment="Center"
+                       Text="{Binding ScanStatus}"
+                       Foreground="{DynamicResource Accent1Brush}"/>
+        </StackPanel>
+
+        <Border Classes="Panel" BorderBrush="{DynamicResource Accent3Brush}"
+                Background="{DynamicResource Bg3Brush}">
+            <StackPanel Spacing="4">
+                <TextBlock Classes="PanelLabel" Text="[ INSTALL STATUS ]"/>
+                <TextBlock Classes="Mono" Text="{Binding InstallStatus}"
+                           Foreground="{DynamicResource Accent1Brush}"/>
+                <TextBlock Classes="Sub"
+                           Text="Use [ INSTALL FROM ZIP ] above — or drag and drop a .zip / .7z / .rar onto this page."/>
+            </StackPanel>
+        </Border>
+
+        <Border Classes="Panel">
+            <StackPanel Spacing="10">
+                <TextBlock Classes="PanelLabel" Text="[ LIBRARY ]"/>
+                <TextBlock Classes="Sub" Text="{Binding EmptyMessage}"/>
+
+                <Grid ColumnDefinitions="20,70,*,90,120,*,180" Margin="0,4,0,4">
+                    <TextBlock Grid.Column="1" Classes="PanelLabel" Text="COMPAT"/>
+                    <TextBlock Grid.Column="2" Classes="PanelLabel" Text="NAME"/>
+                    <TextBlock Grid.Column="3" Classes="PanelLabel" Text="VERSION"/>
+                    <TextBlock Grid.Column="4" Classes="PanelLabel" Text="FRAMEWORK"/>
+                    <TextBlock Grid.Column="5" Classes="PanelLabel" Text="PATH"/>
+                    <TextBlock Grid.Column="6" Classes="PanelLabel" Text="ACTIONS" HorizontalAlignment="Right"/>
+                </Grid>
+
+                <ListBox ItemsSource="{Binding Mods}" Height="420">
+                    <ListBox.ItemTemplate>
+                        <DataTemplate x:DataType="vm:ModRow">
+                            <Grid ColumnDefinitions="20,70,*,90,120,*,180">
+                                <TextBlock Grid.Column="0" Text="›" Foreground="{DynamicResource Accent2Brush}"
+                                           VerticalAlignment="Center"/>
+                                <Border Grid.Column="1"
+                                        Background="{Binding CompatBrush}"
+                                        Padding="6,2" Margin="0,0,8,0"
+                                        VerticalAlignment="Center"
+                                        ToolTip.Tip="{Binding CompatReasons}">
+                                    <TextBlock Text="{Binding CompatLabel}"
+                                               Foreground="{DynamicResource Bg4Brush}"
+                                               FontSize="10" FontWeight="SemiBold"
+                                               HorizontalAlignment="Center"/>
+                                </Border>
+                                <TextBlock Grid.Column="2" Text="{Binding Name}" Foreground="{DynamicResource Text2Brush}"
+                                           VerticalAlignment="Center"/>
+                                <TextBlock Grid.Column="3" Text="{Binding Version}" Classes="Mono"
+                                           VerticalAlignment="Center"/>
+                                <TextBlock Grid.Column="4" Text="{Binding Framework}" Classes="Mono"
+                                           Foreground="{DynamicResource Accent1Brush}"
+                                           VerticalAlignment="Center"/>
+                                <TextBlock Grid.Column="5" Text="{Binding RelativePath}" Classes="Mono"
+                                           Foreground="{DynamicResource Text5Brush}"
+                                           TextTrimming="CharacterEllipsis"
+                                           VerticalAlignment="Center"/>
+                                <StackPanel Grid.Column="6" Orientation="Horizontal" Spacing="6"
+                                            HorizontalAlignment="Right"
+                                            VerticalAlignment="Center">
+                                    <Button Content="[ DELETE ]"
+                                            Command="{Binding RequestDeleteCommand}"
+                                            IsVisible="{Binding !ConfirmingDelete}"
+                                            Foreground="{DynamicResource DndBrush}"
+                                            FontSize="11" Padding="8,4"/>
+                                    <Button Content="[ CONFIRM ]"
+                                            Command="{Binding ConfirmDeleteCommand}"
+                                            IsVisible="{Binding ConfirmingDelete}"
+                                            Foreground="{DynamicResource DndBrush}"
+                                            FontSize="11" Padding="8,4"/>
+                                    <Button Content="[ x ]"
+                                            Command="{Binding CancelDeleteCommand}"
+                                            IsVisible="{Binding ConfirmingDelete}"
+                                            FontSize="11" Padding="8,4"/>
+                                </StackPanel>
+                            </Grid>
+                        </DataTemplate>
+                    </ListBox.ItemTemplate>
+                </ListBox>
+            </StackPanel>
+        </Border>
+    </StackPanel>
+    </ScrollViewer>
+</UserControl>

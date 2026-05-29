@@ -1,0 +1,52 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <OutputType>WinExe</OutputType>
+    <TargetFramework>net8.0</TargetFramework>
+    <Nullable>enable</Nullable>
+    <ApplicationManifest>app.manifest</ApplicationManifest>
+    <AvaloniaUseCompiledBindingsByDefault>true</AvaloniaUseCompiledBindingsByDefault>
+    <AssemblyName>CPMM2067.App</AssemblyName>
+    <Version Condition="'$(Version)' == ''">0.2.0</Version>
+    <Authors>CPMM2067 Project</Authors>
+    <Product>CPMM2067</Product>
+    <Description>Cyberpunk 2077 mod manager (CPMM2067)</Description>
+    <Copyright>MIT</Copyright>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <Folder Include="Models\" />
+    <AvaloniaResource Include="Assets\**" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Avalonia" Version="12.0.3" />
+    <PackageReference Include="Avalonia.Desktop" Version="12.0.3" />
+    <PackageReference Include="Avalonia.Themes.Fluent" Version="12.0.3" />
+    <PackageReference Include="Avalonia.Fonts.Inter" Version="12.0.3" />
+    <PackageReference Include="AvaloniaUI.DiagnosticsSupport" Version="2.2.1">
+      <IncludeAssets Condition="'$(Configuration)' != 'Debug'">None</IncludeAssets>
+      <PrivateAssets Condition="'$(Configuration)' != 'Debug'">All</PrivateAssets>
+    </PackageReference>
+    <PackageReference Include="CommunityToolkit.Mvvm" Version="8.4.1" />
+    <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="10.0.8" />
+    <PackageReference Include="Sentry" Version="6.5.0" />
+    <PackageReference Include="Sentry.Serilog" Version="6.5.0" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\CPMM2067.Core\CPMM2067.Core.csproj" />
+    <ProjectReference Include="..\CPMM2067.Diagnostics\CPMM2067.Diagnostics.csproj" />
+    <ProjectReference Include="..\CPMM2067.GameDetect\CPMM2067.GameDetect.csproj" />
+    <ProjectReference Include="..\CPMM2067.Backup\CPMM2067.Backup.csproj" />
+    <ProjectReference Include="..\CPMM2067.Archives\CPMM2067.Archives.csproj" />
+    <ProjectReference Include="..\CPMM2067.Frameworks\CPMM2067.Frameworks.csproj" />
+    <ProjectReference Include="..\CPMM2067.Conflicts\CPMM2067.Conflicts.csproj" />
+    <!-- Conflicts depends on Core for GameInstallation -->
+
+    <ProjectReference Include="..\CPMM2067.Nexus\CPMM2067.Nexus.csproj" />
+    <ProjectReference Include="..\CPMM2067.Compat\CPMM2067.Compat.csproj" />
+    <ProjectReference Include="..\CPMM2067.Saves\CPMM2067.Saves.csproj" />
+    <ProjectReference Include="..\CPMM2067.Launch\CPMM2067.Launch.csproj" />
+    <ProjectReference Include="..\CPMM2067.Update\CPMM2067.Update.csproj" />
+  </ItemGroup>
+</Project>

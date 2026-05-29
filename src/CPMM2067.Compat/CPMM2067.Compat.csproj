@@ -1,0 +1,19 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <ItemGroup>
+    <ProjectReference Include="..\CPMM2067.Core\CPMM2067.Core.csproj" />
+    <ProjectReference Include="..\CPMM2067.GameDetect\CPMM2067.GameDetect.csproj" />
+    <ProjectReference Include="..\CPMM2067.Nexus\CPMM2067.Nexus.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="System.Net.Http.Json" Version="10.0.8" />
+  </ItemGroup>
+
+  <PropertyGroup>
+    <TargetFramework>net8.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+  </PropertyGroup>
+
+</Project>

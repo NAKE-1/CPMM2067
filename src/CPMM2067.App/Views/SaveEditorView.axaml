@@ -1,0 +1,22 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:vm="using:CPMM2067.App.ViewModels"
+             x:Class="CPMM2067.App.Views.SaveEditorView"
+             x:DataType="vm:SaveEditorViewModel">
+    <ScrollViewer HorizontalScrollBarVisibility="Disabled" VerticalScrollBarVisibility="Auto">
+    <StackPanel Spacing="14" Margin="0,0,0,40">
+        <TextBlock Classes="PanelLabel" Text="// SAVE EDITOR"/>
+        <TextBlock Classes="Heading" Text="save editor"/>
+
+        <Border Classes="Panel">
+            <StackPanel Spacing="12">
+                <TextBlock Classes="Mono" Foreground="{DynamicResource Accent2Brush}" xml:space="preserve">┌──────────────────────────────────────────┐
+│  STATUS: NOT_YET_IMPLEMENTED  (planned v1.4) │
+└──────────────────────────────────────────┘</TextBlock>
+                <TextBlock Text="{Binding Heading}" Foreground="{DynamicResource Text2Brush}" FontWeight="SemiBold"/>
+                <TextBlock Text="{Binding Details}" TextWrapping="Wrap" Classes="Sub"/>
+            </StackPanel>
+        </Border>
+    </StackPanel>
+    </ScrollViewer>
+</UserControl>

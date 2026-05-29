@@ -1,0 +1,61 @@
+<Window xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:vm="using:CPMM2067.App.ViewModels"
+        x:Class="CPMM2067.App.Views.FomodWizardDialog"
+        x:DataType="vm:FomodWizardViewModel"
+        Width="780" Height="640"
+        MinWidth="600" MinHeight="400"
+        Background="{DynamicResource Bg4Brush}"
+        Title="CPMM2067 — FOMOD install"
+        WindowStartupLocation="CenterOwner">
+
+    <DockPanel Margin="18">
+        <TextBlock DockPanel.Dock="Top" Classes="Heading" Margin="0,0,0,4"
+                   Text="{Binding ModuleName, StringFormat='FOMOD: {0}'}"/>
+        <TextBlock DockPanel.Dock="Top" Classes="PanelLabel" Text="[ INSTALL OPTIONS ]"/>
+        <TextBlock DockPanel.Dock="Top" Classes="Sub" Margin="0,0,0,10" TextWrapping="Wrap"
+                   Text="Each group below is an install-time choice. Recommended/Required options are pre-selected. Adjust then [ INSTALL ]."/>
+
+        <StackPanel DockPanel.Dock="Bottom" Orientation="Horizontal"
+                    HorizontalAlignment="Right" Spacing="10" Margin="0,12,0,0">
+            <Button Name="InstallButton" Classes="Accent" Content="[ INSTALL WITH SELECTED OPTIONS ]"/>
+            <Button Name="CancelButton" Content="[ cancel ]"/>
+        </StackPanel>
+
+        <ScrollViewer VerticalScrollBarVisibility="Auto">
+            <ItemsControl ItemsSource="{Binding Groups}">
+                <ItemsControl.ItemTemplate>
+                    <DataTemplate x:DataType="vm:FomodStepGroup">
+                        <Border Classes="Panel" Margin="0,4">
+                            <StackPanel Spacing="6">
+                                <TextBlock Classes="PanelLabel" Text="{Binding Heading}"/>
+                                <ItemsControl ItemsSource="{Binding Options}">
+                                    <ItemsControl.ItemTemplate>
+                                        <DataTemplate x:DataType="vm:FomodOption">
+                                            <Grid ColumnDefinitions="Auto,*" Margin="0,2">
+                                                <CheckBox Grid.Column="0"
+                                                          IsChecked="{Binding IsSelected, Mode=TwoWay}"/>
+                                                <StackPanel Grid.Column="1" Margin="6,0,0,0">
+                                                    <TextBlock>
+                                                        <Run Text="{Binding Name}"
+                                                             Foreground="{DynamicResource Text2Brush}"/>
+                                                        <Run Text=" — "
+                                                             Foreground="{DynamicResource Text5Brush}"/>
+                                                        <Run Text="{Binding TypeHint}" Classes="Mono"
+                                                             Foreground="{DynamicResource Accent1Brush}"/>
+                                                    </TextBlock>
+                                                    <TextBlock Text="{Binding Description}" Classes="Sub"
+                                                               TextWrapping="Wrap"/>
+                                                </StackPanel>
+                                            </Grid>
+                                        </DataTemplate>
+                                    </ItemsControl.ItemTemplate>
+                                </ItemsControl>
+                            </StackPanel>
+                        </Border>
+                    </DataTemplate>
+                </ItemsControl.ItemTemplate>
+            </ItemsControl>
+        </ScrollViewer>
+    </DockPanel>
+</Window>
